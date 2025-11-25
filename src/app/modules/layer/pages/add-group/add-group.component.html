@@ -1,0 +1,70 @@
+<button mat-fab color="primary" class="close-icon" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+<div class="content">
+  <h1 class="title">
+    <ng-container *ngIf="group; else create">
+      {{ "layer.edit_group" | translate }}
+    </ng-container>
+    <ng-template #create>
+      {{ "layer.add_new_group" | translate }}
+    </ng-template>
+  </h1>
+  <form [formGroup]="form" *ngIf="form as context" class="formgroup">
+    <mat-form-field appearance="outline" color="primary" style="width: 100%">
+      <mat-label>{{ "layer.group_name" | translate }}</mat-label>
+      <input matInput formControlName="name" type="text" name="name" />
+      <mat-error *ngIf="context.get('name').errors?.['required']">
+        {{ "layer.group_name_required" | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div style="width: 100%" #containerColorPicker>
+      <app-color-picker
+        style="display: block"
+        [width]="'100%'"
+        [colorLabel]="'layer.group_color' | translate"
+        [colorError]="'layer.group_color_required' | translate"
+        [colorForm]="form.get('color')"
+        [position]="'left'"
+        [container]="containerColorPicker"
+      ></app-color-picker>
+    </div>
+    <mat-checkbox style="width: 100%" class="checkbox" formControlName="is_visible" color="primary">{{ 'layer.visible_for_admin_only' | translate }}</mat-checkbox>
+  </form>
+
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      color="accent"
+      class="btn-submit"
+      (click)="group ? onUpdateInstance() : onAddInstance()"
+      [disabled]="!form.valid"
+    >
+      <ng-container *ngIf="group; else creation">
+        {{ "valid" | translate }}</ng-container
+      >
+      <ng-template #creation>{{ "layer.add_group" | translate }}</ng-template>
+    </button>
+
+    <button
+      mat-stroked-button
+      color="warn"
+      class="btn-submit"
+      *ngIf="group"
+      (click)="onDeleteInstance()"
+    >
+      {{ "delete" | translate }}
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="close()"
+      class="btn-submit"
+      *ngIf="!group"
+    >
+      {{ "cancel" | translate }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<button
+  mat-fab
+  [color]="data.danger ? 'warn' : 'primary'"
+  class="close-icon"
+  (click)="closeDialog(false)"
+>
+  <mat-icon>close</mat-icon>
+</button>
+
+<h1 mat-dialog-title>
+  <span
+    class="bold"
+    [ngClass]="data.danger ? 'warnColor' : 'primaryColor'"
+    style="font-size: 17px"
+  >
+    {{ data.confirmationTitle }}
+  </span>
+</h1>
+
+<mat-dialog-content>
+  <p align="center">{{ data.confirmationExplanation }}</p>
+</mat-dialog-content>
+
+<div mat-dialog-actions class="actions">
+  <div fxLayout fxLayoutGap="15px" fxLayoutAlign="end">
+    <button
+      class="btn-submit"
+      fxFlex="150px"
+      mat-stroked-button
+      [color]="data.danger ? 'warn' : 'primary'"
+      (click)="closeDialog(true)"
+    >
+      {{ data.confirmText }}
+    </button>
+
+    <button
+      fxFlex="200px"
+      mat-flat-button
+      [color]="data.danger ? 'warn' : 'primary'"
+      class="white btn-submit"
+      (click)="closeDialog(false)"
+    >
+      {{ data.cancelText }}
+    </button>
+  </div>
+</div>

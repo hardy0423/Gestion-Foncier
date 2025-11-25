@@ -1,0 +1,1 @@
+docker-compose exec frontend ng build --configuration production

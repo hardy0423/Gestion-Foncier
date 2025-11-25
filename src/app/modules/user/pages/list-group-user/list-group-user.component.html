@@ -1,0 +1,99 @@
+<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="100%">
+    <h1 class="title">
+      {{ "user.manage_group" | translate }}
+    </h1>
+  </div>
+  <button
+    mat-fab
+    color="primary"
+    class="close-icon"
+    (click)="dialogRef.close(false)"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div style="text-align: center; margin-top: 10px">
+  <button
+    (click)="onAddGroupUserInstance()"
+    mat-raised-button
+    color="accent"
+    class="btn-add"
+  >
+    {{ "user.add_group_user" | translate }}
+  </button>
+</div>
+
+<div class="text-center loading-spinner">
+  <mat-spinner color="primary" diameter="50" *ngIf="loading"></mat-spinner>
+</div>
+
+<ng-container *ngIf="groups$ | async as groups">
+  <div class="list-groups" *ngIf="groups.length > 0">
+    <div fxFlex class="list-groups-body">
+      <div #scroll class="list-groups-body-table scroll">
+        <table
+          mat-table
+          matSort
+          matSortActive="created_at"
+          matSortDisableClear
+          matSortDirection="desc"
+          [dataSource]="groups"
+          class="list-groups-body-table"
+        >
+          <ng-container matColumnDef="name">
+            <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>
+              {{ "user.group_name" | translate }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.required ? 'element-inactive' : ''"
+            >
+              {{ element.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="users_count">
+            <th mat-header-cell disableClear *matHeaderCellDef>
+              {{ "left_panel.users" | translate }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              [ngClass]="element.required ? 'element-inactive' : ''"
+            >
+              <ng-container
+                *ngIf="
+                  element.user_id && element.user_id?.length > 0;
+                  else no_user
+                "
+              >
+                {{ element.user_id?.length }}
+              </ng-container>
+              <ng-template #no_user> Aucun utilisateur </ng-template>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="pointer"
+            (click)="onEditGroupUserInstance(row)"
+            [ngClass]="row.required ? 'element-row-inactive' : ''"
+          ></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="groups.length == 0">
+    <div class="no-data">
+      <h3>{{ "group.no_group_found" | translate }}</h3>
+    </div>
+  </ng-container>
+</ng-container>

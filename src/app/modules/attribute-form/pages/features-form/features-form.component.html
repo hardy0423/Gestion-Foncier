@@ -1,0 +1,123 @@
+<div class="container">
+  <div class="loading" [hidden]="!loading">
+    <div class="loader-digitaliser">Loading...</div>
+  </div>
+  <ng-container *ngIf="customFields$ | async as customFields">
+    <div style="text-align: center">
+      <button
+        style="margin-bottom: 10px"
+        mat-stroked-button
+        (click)="zoomOnFeature()"
+      >
+        <span> {{ "map.edit.zoom_to_feature" | translate }}</span>
+        <i class="fa fa-crosshairs" style="margin-left: 5px"></i>
+      </button>
+
+      <button
+        style="margin-bottom: 10px; margin-left: 10px"
+        mat-stroked-button
+        (click)="blinkFeature()"
+      >
+        <span> {{ "map.edit.blink_feature" | translate }}</span>
+        <i class="fa fa-lightbulb" style="margin-left: 5px"></i>
+      </button>
+    </div>
+    <ng-container *ngIf="form">
+      <mat-card
+        [ngClass]="{
+          success: form.valid,
+          error: !form.valid
+        }"
+      >
+        <mat-card-content>
+          <form [formGroup]="form" style="margin-bottom: 10px">
+            <ng-container *ngFor="let data of customFields">
+              <div style="display: flex;">
+                <mat-form-field
+                  appearance="outline"
+                  style="width: 100%"
+                  *ngIf="
+                    data !=undefined && 
+                    data.field != undefined &&  
+                    data.field.name_field != layerToDigitalise.fieldId"
+                >
+                  <mat-label>{{
+                    data.field.alias_fr ? data.field.alias_fr : data.field.name_field
+                  }}</mat-label>
+                  <input matInput *ngIf="!data.prop.isMany"  [formControlName]="data.field.name_field" type="{{data.field.fieldtype}}"/>
+
+                <!-- IF field has multivalue-->
+                <select 
+                  matNativeControl 
+                  *ngIf="data.prop.isMany" 
+                  [formControlName]="data.field.name_field"
+                >
+                  <option 
+                    *ngFor="let value of data.prop.values" 
+                    [ngValue]="value"
+                    >
+                    {{value}}
+                  </option>
+                </select>
+              <!-- END IF -->
+                </mat-form-field>
+                <i class="fa fa-trash pointer delete-field" 
+                  *ngIf="data.field.name_field != layerToDigitalise.fieldId"
+                  (click)="removeField(data.field.name_field)"
+                  matTooltip="
+                    {{ 'layer.list_field.remove_field' | translate }} 
+                    {{data.field.alias_fr ? data.field.alias_fr : data.field.name_field}}"
+                ></i>
+              </div>
+            </ng-container>
+          </form>
+        </mat-card-content>
+      </mat-card>
+      <div class="actions-btns">
+        <button
+          style="width: 100%; margin-bottom: 10px"
+          class="submit-btn"
+          [disabled]="
+            !form.valid
+          "
+          mat-stroked-button
+          (click)="onSubmitInstance()"
+        >
+          {{ "map.edit.valider" | translate }}
+        </button>
+  
+        <button
+          style="width: 100%; margin-bottom: 10px"
+          mat-stroked-button
+          class="redBorder"
+          (click)="onDeleteInstance()"
+        >
+          <span class="red"> {{ "map.edit.supprimer_feature" | translate }}</span>
+          <i class="fa fa-trash red" style="margin-left: 5px"></i>
+        </button>
+  
+        <button
+          style="width: 100%; margin-bottom: 10px"
+          mat-stroked-button
+          (click)="onCancelInstance()"
+        >
+          {{ "map.edit.annuler" | translate }}
+        </button>
+
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div [hidden]="loading" *ngIf="layerToDigitalise != undefined">
+    <ng-container *ngIf="userRight$ | async as userHasRight">
+      <app-fields 
+      [project]="layerToDigitalise.selectedFeature.couche.qgis_project" 
+      [layer]="layerToDigitalise.selectedFeature.couche.identifiant[0]"
+      [providerVectorId]="layerToDigitalise.selectedFeature.provider_vector_id"
+      [hidden]="!userHasRight"
+      [existingFields]="fields">
+    </app-fields>
+    </ng-container>
+  </div>
+  
+</div>

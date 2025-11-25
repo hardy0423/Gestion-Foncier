@@ -1,0 +1,15 @@
+<div class="content">
+    <ng-container *ngIf="layersForPreview.providers[0] " > 
+        <ng-container *ngIf="layersForPreview.providers[0].vs" > 
+            <div class="wms-filter" *ngIf="layersForPreview.providers[0].vs.category && layersForPreview.providers[0].vs.category.length > 1">
+                <app-wms-filter [layer]="layersForPreview.providers[0]" (optionsSelected$)="setOptionsSelected($event)" ></app-wms-filter>
+            </div>
+        </ng-container>
+    </ng-container>
+    
+    <div id="map" #previewMapContainer class="map-container"></div>
+    <div *ngIf="showLoading" style="position: absolute; bottom: 30px; right: 30px">
+        <mat-progress-spinner mode="indeterminate" diameter="25">
+        </mat-progress-spinner>
+    </div>
+</div>

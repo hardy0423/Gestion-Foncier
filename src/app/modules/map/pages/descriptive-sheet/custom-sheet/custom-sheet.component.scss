@@ -1,0 +1,38 @@
+
+.descriptive-sheet-body-display-attributes-number{
+    font-size: 14px;
+    color: inherit;
+    // font-family: Avenir Next Rounded Pro Italic;
+    text-decoration: underline;
+}
+
+.descriptive-sheet-body{
+    // font-family:'Avenir Next Rounded Pro Regular';
+    font-size: 15px;
+    margin-bottom: 10px;
+    .attribute{
+      padding-right: 10px;
+      text-align: right;
+      position: relative;
+      .attribute-title{
+        // font-family:'Avenir Next Rounded Pro Medium';
+        font-weight: bold;
+        text-align: right;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        // hyphens: auto;
+        display: block;
+      }
+      .attribute-two-points{
+        position: absolute;
+        top: calc(50% - 10px);
+        margin-left: 5px;
+      }
+    }
+    .attribute-value{
+      padding-left: 5px;
+      div{
+          text-align: left;
+      }
+    }
+  }

@@ -1,0 +1,135 @@
+<div class="border">
+  <div class="switch-container">
+    <div class="handle one" id="h"></div>
+    <div class="opt activated" id="one" (click)="read()">
+      {{ "user.right_read" | translate }}
+    </div>
+    <div class="opt" id="two" (click)="write()">
+      {{ "user.right_write" | translate }}
+    </div>
+  </div>
+</div>
+
+<div *ngIf="typeRight == 1" class="tabcontent">
+  <span class="title">
+    {{ "user.list_layer_user" | translate }}
+    <span>
+      <ng-container *ngIf="user.first_name || user.last_name; else no_name">
+        {{ user.first_name }} {{ user.last_name }}
+      </ng-container>
+      <ng-template #no_name>
+        {{ user.username }}
+      </ng-template>
+    </span>
+    <span
+      class="group_class"
+      matTooltip="'user.update_group' | translate"
+      (click)="onEditGroupInstance(user.group_id)"
+      *ngIf="user.group_id && user.group_name"
+    >
+      {{ user.group_name }}
+    </span>
+    {{ "user.list_layer_user_suite" | translate }}
+  </span>
+
+  <ng-container *ngIf="layerRight$ | async as layerRight">
+    <mat-selection-list [multiple]="false" class="select-list">
+      <mat-list-option *ngFor="let layer of layerRight.no_read">
+        <img
+          mat-list-icon
+          [src]="env.backendUrl + layer.cercle_icon"
+          class="layer-img"
+        />
+        <div class="layer-name">
+          <span class="name"> {{ layer.name }}</span>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+
+    <ng-container *ngIf="layerRight.no_read.length == 0">
+      <p align="center">
+        {{ "user.this_user" | translate }} de
+        <span>
+          <ng-container *ngIf="user.first_name || user.last_name; else no_name">
+            {{ user.first_name }} {{ user.last_name }}
+          </ng-container>
+          <ng-template #no_name>
+            {{ user.username }}
+          </ng-template>
+        </span>
+        <span
+          class="group_class"
+          matTooltip="'user.update_group' | translate"
+          (click)="onEditGroupInstance(user.group_id)"
+          *ngIf="user.group_id && user.group_name"
+        >
+          <ng-container *ngIf="user.group_name">
+            {{ user.group_name }}
+          </ng-container>
+        </span>
+        {{ "user.user_right_read_empty" | translate }}
+      </p>
+    </ng-container>
+  </ng-container>
+</div>
+
+<div *ngIf="typeRight == 2" class="tabcontent">
+  <ng-container *ngIf="layerRight$ | async as layerRight">
+    <span class="title">
+      {{ "user.list_layer_user" | translate }}
+      <span>
+        <ng-container *ngIf="user.first_name || user.last_name; else no_name">
+          {{ user.first_name }} {{ user.last_name }}
+        </ng-container>
+        <ng-template #no_name>
+          {{ user.username }}
+        </ng-template>
+      </span>
+      <span
+        class="group_class"
+        matTooltip="'user.update_group' | translate"
+        (click)="onEditGroupInstance(user.group_id)"
+        *ngIf="user.group_id && user.group_name"
+        >{{ user.group_name }}</span
+      >
+      {{ "user.list_layer_user_suite_write" | translate }}
+    </span>
+
+    <mat-selection-list [multiple]="false" class="select-list">
+      <mat-list-option *ngFor="let layer of layerRight.write">
+        <img
+          mat-list-icon
+          [src]="env.backendUrl + layer.cercle_icon"
+          class="layer-img"
+        />
+        <div class="layer-name">
+          <span class="name"> {{ layer.name }}</span>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+    <ng-container *ngIf="layerRight.write.length == 0">
+      <p align="center">
+        {{ "user.this_user" | translate }} de
+        <span>
+          <ng-container *ngIf="user.first_name || user.last_name; else no_name">
+            {{ user.first_name }} {{ user.last_name }}
+          </ng-container>
+          <ng-template #no_name>
+            {{ user.username }}
+          </ng-template>
+        </span>
+        <span
+          class="group_class"
+          matTooltip="'user.update_group' | translate"
+          (click)="onEditGroupInstance(user.group_id)"
+          *ngIf="user.group_id && user.group_name"
+        >
+          <ng-container *ngIf="user.group_name">
+            {{ user.group_name }}
+          </ng-container>
+        </span>
+        {{ "user.user_right_write_empty" | translate }}
+      </p>
+    </ng-container>
+  </ng-container>
+</div>

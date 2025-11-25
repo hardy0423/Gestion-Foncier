@@ -1,0 +1,117 @@
+<div class="content">
+  <div class="header">
+    <h1 class="title">
+      {{ "user.add_group" | translate }}
+    </h1>
+    <button mat-fab color="primary" class="close-icon" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="form" *ngIf="form as context" class="formgroup">
+    <mat-form-field appearance="outline" color="primary" style="width: 100%">
+      <mat-label>{{ "layer.group_name" | translate }}</mat-label>
+      <input matInput formControlName="name" type="text" name="name" />
+      <mat-error *ngIf="context.get('name').errors?.['required']">
+        {{ "layer.group_name_required" | translate }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field style="width: 100%; margin-top: 10px" appearance="outline">
+      <i class="fa fa-search" aria-hidden="true" matPrefix></i>
+      <input
+        matInput
+        formControlName="search_word"
+        [matAutocomplete]="autoComplete"
+        [placeholder]="'user.search_user' | translate"
+      />
+      <i
+        class="fa fa-times-circle pointer"
+        matSuffix
+        (click)="form.get('search_word').setValue(null)"
+        *ngIf="form.get('search_word').value"
+      ></i>
+      <mat-autocomplete
+        autoActiveFirstOption
+        #autoComplete="matAutocomplete"
+        [displayWith]="displaySelectedUser"
+      >
+        <mat-option
+          *ngFor="let user of searchResultUser | async"
+          [value]="user"
+        >
+          <mat-list>
+            <mat-list-item>
+              <div mat-line>
+                <ng-container
+                  *ngIf="user.first_name || user.last_name; else no_name"
+                >
+                  {{ user.first_name }} {{ user.last_name }}
+                </ng-container>
+                <ng-template #no_name>
+                  {{ user.username }}
+                </ng-template>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-selection-list [multiple]="false" class="select-list">
+      <mat-list-option *ngFor="let user of users" [value]="user">
+        <div class="user-name">
+          <span class="name">
+            <ng-container
+              *ngIf="user.first_name || user.last_name; else no_name"
+            >
+              {{ user.first_name }} {{ user.last_name }}
+            </ng-container>
+            <ng-template #no_name>
+              {{ user.username }}
+            </ng-template>
+          </span>
+          <mat-icon
+            class="user-img"
+            (click)="onDelete(user)"
+            [matTooltip]="'user.remove_user_in_list' | translate"
+            matTooltipPosition="after"
+          >
+            delete
+          </mat-icon>
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list-option>
+    </mat-selection-list>
+  </form>
+
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      color="accent"
+      class="btn-submit"
+      (click)="group ? onUpdateInstance() : onAddInstance()"
+      [disabled]="!form.valid"
+    >
+      <ng-container *ngIf="group; else creation">
+        {{ "valid" | translate }}</ng-container
+      >
+      <ng-template #creation>{{ "layer.add_group" | translate }}</ng-template>
+    </button>
+
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="close()"
+      class="btn-submit"
+    >
+      {{ "cancel" | translate }}
+    </button>
+  </div>
+
+  <mat-spinner
+    diameter="50"
+    style="position: absolute; left: 50%"
+    *ngIf="form.disabled"
+  ></mat-spinner>
+</div>

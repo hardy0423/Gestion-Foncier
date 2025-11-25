@@ -1,0 +1,85 @@
+<div class="container new-field">
+    <mat-card style="margin-top: 10px;margin-bottom: 10px;">
+        <mat-card-content>
+            <div style="width: 100%;">
+                <div class="field-title-container">
+                    <h3>{{name}}</h3>
+      
+                    <button
+                    class="delete-field-button"
+                    (click)="removeComponent()"
+                    type="button"
+                    >
+                    <i class="fa fa-trash red"></i>
+                    </button>
+          
+                </div>
+                <mat-error>*</mat-error>
+                <div style="display: flex;gap: 10px;">
+                    <div style="width: 100%;" >
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-label>{{'layer.list_field.name' | translate}}</mat-label>
+                            <input type="text" matInput [(ngModel)]="name" (ngModelChange)="onNameChange($event)"/>
+                        </mat-form-field>
+                    </div>
+                
+                    <mat-form-field style="width: 100%;" appearance="outline">
+                        <mat-label>{{'layer.list_field.alias' | translate}}</mat-label>
+                        <input type="text" matInput [(ngModel)]="alias"/>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <div>
+                        <mat-error>*</mat-error>
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <mat-label>{{'layer.list_field.select_data_type' | translate}}</mat-label>
+                            <mat-select [(ngModel)]="type" (ngModelChange)="onDataTypeChange($event)">
+                                <mat-option value="text">{{'layer.list_field.text' | translate}}</mat-option>
+                                <mat-option value="int">{{'layer.list_field.number' | translate}}</mat-option>
+                                <mat-option value="date">{{'layer.list_field.date' | translate}}</mat-option>
+                                <mat-option value="multiplechoices">{{'layer.list_field.multiple_choice' | translate}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        
+                    </div>
+                    <div [style.display]="isMultipleChoices ? 'block' : 'none'">
+                        <div class="multiplechoices-button-container">
+                            <button (click)="displayChoices()" class="display-button">
+                                <i [className]="isDisplayChoices ? 'fa fa-angle-down': 'fa fa-angle-right'" [style.color]="isChoicesValid? 'gray':'red'"></i>
+                                <span [style.color]="isChoicesValid? 'gray':'red'">{{'layer.list_field.show_choices' | translate}} ({{inputs.length}} {{'layer.list_field.choice' | translate}})</span>
+                            </button>
+                            <button
+                                class="choice-button"
+                                (click)="addChoice()"
+                                type="button"
+                                matTooltip="{{'layer.list_field.add_choice_tooltip' | translate}}"
+                                >
+                                <i class="fa fa-plus blue"></i>
+                            </button>
+                        </div>
+                        <div [className]="isDisplayChoices ? 'show': 'hidden'">
+                            <div #choicesContainer style="padding-right: 1.5rem;padding-left: 1.5rem;" [formGroup]="choicesForm">
+                                <div *ngFor="let input of inputs;let i = index">
+                                    <div class="choice-container">
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <input matInput type="text" formControlName="{{input}}">
+                                        </mat-form-field>
+                                        <button
+                                            class="choice-button"
+                                            (click)="removeChoice(input)"
+                                            type="button"
+                                            matTooltip="{{'layer.list_field.remove_choice_tooltip' | translate}}">
+                                            
+                                            <i class="fa fa-trash red"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>    
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

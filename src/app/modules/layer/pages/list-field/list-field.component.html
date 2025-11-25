@@ -1,0 +1,86 @@
+<div class="list-field">
+  <button
+    class="btn-save"
+    mat-stroked-button
+    [disabled]="tableForm.disabled"
+    color="accent"
+    (click)="manageTabField()"
+  >
+    Formulaire d'affichage
+  </button>
+  <form #scroll [formGroup]="tableForm" class="body-div-table scroll">
+    <table class="form-table">
+      <tr>
+        <th style="border-radius: 20px 0 0 0">
+          {{ "layer.list_field.name" | translate }}
+        </th>
+        <th>{{ "layer.list_field.alias" | translate }}</th>
+        <th>{{ "layer.list_field.alias_de" | translate }}</th>
+        <th>{{ "layer.list_field.search" | translate }}</th>
+        <th style="border-radius: 0 20px 0 0">
+          {{ "layer.list_field.visibility" | translate }}
+        </th>
+      </tr>
+      <tbody
+        formArrayName="Rows"
+        [cdkDropListData]="formArr.controls"
+        cdkDropList
+        [cdkDropListDisabled]="true"
+        (cdkDropListDropped)="drop($event)"
+      >
+        <ng-container (cdkDropListDropped)="drop($event)">
+          <tr
+            *ngFor="let obj of formArr.controls; let i = index; let l = last"
+            [formGroupName]="i"
+            cdkDrag
+          >
+            <td
+              style="width: 25%; border-left: solid 3px #2872c2"
+              [ngClass]="l ? 'last_data' : ''"
+            >
+              {{ obj.value.name_field }}
+            </td>
+            <td style="width: 25%" [ngClass]="l ? 'last_data' : ''">
+              <mat-form-field
+                appearance="outline"
+                style="width: 75%; height: 6.5vh"
+              >
+                <input matInput formControlName="alias_fr" />
+              </mat-form-field>
+            </td>
+            <td style="width: 25%" [ngClass]="l ? 'last_data' : ''">
+              <mat-form-field
+                appearance="outline"
+                style="width: 75%; height: 6.5vh"
+              >
+                <input matInput formControlName="alias_de" />
+              </mat-form-field>
+            </td>
+
+            <td style="width: 12.5%" [ngClass]="l ? 'last_data' : ''">
+              <mat-checkbox formControlName="search"></mat-checkbox>
+            </td>
+            <td style="width: 12.5%" [ngClass]="l ? 'last_data' : ''">
+              <mat-checkbox formControlName="displayed"></mat-checkbox>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </form>
+  <button
+    class="btn-save white"
+    mat-flat-button
+    [disabled]="tableForm.disabled"
+    color="primary"
+    (click)="save()"
+    style="float: right; margin-top: 10px"
+  >
+    {{ "layer.list_field.save" | translate }}
+  </button>
+
+  <mat-spinner
+    style="position: absolute; left: 40%; top: 50%"
+    *ngIf="loading"
+  ></mat-spinner>
+</div>

@@ -1,0 +1,33 @@
+<mat-drawer-container class="drawer-container" hasBackdrop="false">
+  <mat-drawer
+    #drawer
+    mode="over"
+    position="end"
+    style="width: 25vw"
+    autoFocus="false"
+  >
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="content">
+      <div class="header">
+        <img
+          class="logo-page"
+          src="../../../../../assets/images/logo/logo_bale_mulhouse.png"
+        />
+        <button mat-icon-button (click)="closeLayer();" style="float: right" color="primary">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Carte">
+          <app-group-item [profil]="1"></app-group-item>
+        </mat-tab>
+        <mat-tab label="Foncier">
+          <app-group-item [profil]="2"></app-group-item>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+<router-outlet></router-outlet>
+<notifier-container></notifier-container>

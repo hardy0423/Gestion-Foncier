@@ -1,0 +1,26 @@
+<div style="margin: 20px;">
+    <div class="loading" [hidden]="!loading">
+        <div class="loader-digitaliser">Loading...</div>
+    </div>
+    <div class="fields-title-container">
+        <h3>{{"layer.list_field.add_fields" | translate}}</h3>
+        <button
+        class="add-field-button"
+        (click)="addField()"
+        >
+            {{'add' | translate}}
+        </button>
+    </div>
+    <ng-container style="padding: 0.5rem;" #dynamicContainer>
+    </ng-container>
+
+    <button
+          style="width: 100%; margin-bottom: 10px; margin-top: 10px;"
+          class="submit-btn"
+          mat-stroked-button
+          [disabled]="!isValid"
+          (click)="saveFields()"
+        >
+          {{"map.edit.save_edit" | translate}}
+    </button>
+</div>

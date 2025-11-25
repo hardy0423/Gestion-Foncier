@@ -1,0 +1,168 @@
+<h1
+  mat-dialog-title
+  class="primaryColorBG white"
+  cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane"
+  style="position: relative"
+>
+  <span>
+    <div class="descriptive-sheet-header-ghost" cdkDragHandle></div>
+    <img
+      [src]="environment.backendUrl + dataOsmLAyer?.layer.cercle_icon"
+      alt=""
+      srcset=""
+      class="icon_header"
+      style="margin-top: 4px; height: 25px"
+    />
+    <!-- <i class="fa fa-arrows-alt white" style="font-size:20px" aria-hidden="true"  ></i> -->
+    {{ dataOsmLAyer?.layer.name }}
+  </span>
+  <i
+    mat-dialog-close
+    class="fa fa-times pointer close"
+    (click)="closeModal()"
+  ></i>
+</h1>
+
+<div
+  mat-dialog-content
+  style="padding-top: 5px; max-height: 250px !important; overflow: hidden"
+  class="scroll"
+>
+  <div
+    style="position: relative; margin-top: 10px"
+    *ngIf="featureInfoIsLoading"
+  >
+    <div style="position: absolute; top: calc(50% - 30px); left: 40%">
+      <div class="lds-ripple" style="width: 100px; height: 100px">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <ng-container *ngIf="context.features != undefined"> -->
+  <ng-container *ngIf="{ features: features$ | async } as context">
+    <div class="text-center">
+      <mat-chip-list
+        id="asd"
+        style="display: inline-table"
+        #featuresList
+        [multiple]="false"
+        color="accent"
+        selectable
+      >
+        <mat-chip
+          #chip="matChip"
+          (click)="toggleSelection(chip)"
+          *ngFor="let feat of context.features; let index = index"
+          [value]="feat"
+        >
+          <ng-container *ngIf="feat.properties['length'] > 0">
+            <img
+              matChipAvatar
+              *ngIf="feat.couche.iconImagette"
+              [src]="feat.couche.iconImagette"
+            />
+            {{ feat.feature_display }}
+          </ng-container>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <ng-container *ngIf="selectedFeature$ | async as selectedFeature">
+      <app-custom-sheet
+        *ngIf="selectedFeature.feature.typeDescriptiveSheet != 'osm'"
+        [fields]="selectedFeature.fields"
+        [feature]="selectedFeature.feature"
+        [map]="data[0].map"
+      ></app-custom-sheet>
+    </ng-container>
+
+    <!-- </ng-container> -->
+  </ng-container>
+</div>
+
+<div mat-dialog-actions class="fiche-descriptive-actions">
+  <button mat-raised-button [hidden]="!extent" (click)="zoomOnFeatureExtent()">
+    <i class="fa fa-search-plus"> </i>
+    {{ "descriptive_sheet.zoomTo" | translate }}
+  </button>
+  <ng-container *ngIf="selectedFeature$ | async as selectedFeature">
+    <button mat-raised-button [matMenuTriggerFor]="menuCopy">
+      <mat-icon style="width: 20px; font-size: 20px; height: 20px"
+        >file_download</mat-icon
+      >
+      {{ "dowloadLayers.download" | translate }}
+      <i class="fa fa-chevron-down" aria-hidden="true"></i>
+      <mat-spinner
+        style="position: absolute; left: 45%; top: 16%"
+        diameter="25"
+        *ngIf="isLoadingDownload"
+      ></mat-spinner>
+    </button>
+    <mat-menu #menuCopy="matMenu">
+      <a
+        mat-menu-item
+        (click)="onDownloadInstance('shp', selectedFeature.feature)"
+      >
+        ShapeFile
+      </a>
+      <a
+        mat-menu-item
+        (click)="onDownloadInstance('geojson', selectedFeature.feature)"
+      >
+        GeoJSON
+      </a>
+      <a
+        mat-menu-item
+        (click)="onDownloadInstance('gpkg', selectedFeature.feature)"
+      >
+        Geopackage
+      </a>
+      <a
+        mat-menu-item
+        (click)="onDownloadInstance('gpx', selectedFeature.feature)"
+      >
+        GPX
+      </a>
+      <a
+        mat-menu-item
+        (click)="onDownloadInstance('xlsx', selectedFeature.feature)"
+      >
+        Xlsx
+      </a>
+      <a
+        mat-menu-item
+        (click)="onDownloadInstance('csv', selectedFeature.feature)"
+      >
+        CSV
+      </a>
+    </mat-menu>
+
+    <button
+      mat-raised-button
+      [hidden]="!extent"
+      (click)="shareFeature(selectedFeature.feature)"
+      style="margin-left: 10px"
+    >
+      <i class="fa fa-share-alt"> </i>
+      {{ "descriptive_sheet.share" | translate }}
+    </button>
+
+    <button
+      mat-raised-button
+      (click)="onEditFeatureInstance(selectedFeature.feature)"
+      style="margin-left: 10px"
+      *ngIf="selectedFeature.feature.couche.canWrite"
+      [disabled]="selectedFeature.feature.couche.descriptionSheetCapabilities != 'sigfile'"
+    >
+      <i class="fa fa-pen-to-square"> </i>
+      {{ "map.feature_edit" | translate }}
+      <mat-spinner
+        style="position: absolute; left: 45%; top: 16%"
+        diameter="25"
+        *ngIf="isLoadingUpdate"
+      ></mat-spinner>
+    </button>
+  </ng-container>
+</div>

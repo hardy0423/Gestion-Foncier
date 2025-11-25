@@ -1,0 +1,42 @@
+<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="100%">
+    <h1 class="title">{{ "layer.layer_management" | translate }}</h1>
+  </div>
+  <button mat-fab color="primary" class="close-icon" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div class="content">
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab label="{{ 'layer.preview' | translate }}">
+      <ng-template matTabContent>
+        <app-layer-viewer
+          [layersForPreview]="layersForPreview"
+        ></app-layer-viewer>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="{{ 'layer.symbology' | translate }}">
+      <ng-template matTabContent>
+        <app-layer-style [layer]="layersForPreview"></app-layer-style>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="{{ 'layer.attributes_table' | translate }}">
+      <ng-template matTabContent>
+        <app-list-field
+          [vectorProvider]="layersForPreview.providers[0].vp"
+        ></app-list-field>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="{{ 'layer.general' | translate }}">
+      <ng-template matTabContent>
+        <app-edit-layer [layer]="layersForPreview"></app-edit-layer>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="{{ 'user.right' | translate }}">
+      <ng-template matTabContent>
+        <app-layer-right [layer]="layersForPreview"></app-layer-right>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

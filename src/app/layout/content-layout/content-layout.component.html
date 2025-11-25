@@ -1,0 +1,124 @@
+<mat-drawer-container>
+  <mat-drawer mode="side" opened class="left-panel" *ngIf="!isFullscreen">
+    <div
+      class="left-panel-body primaryColorBG"
+      fxLayout="column"
+      fxLayoutAlign="space-between center"
+    >
+      <mat-selection-list
+        [multiple]="false"
+        fxLayout="column"
+        fxLayoutAlign="start center"
+        (selectionChange)="onSelection($event)"
+      >
+        <mat-list-option
+          class="primaryColor"
+          *ngIf="store.user?.is_superuser || store.user.maps.includes(1)"
+          fxFlex="130px"
+          (click)="parametersService.updateMapClicked()"
+          [value]="1"
+          [ngClass]="
+            current_selected == 1 ? 'menu-selected' : 'menu-not-selected'
+          "
+          [matTooltip]="
+            (current_selected == 1 ? ('left_panel.' + parametersService.toolTipText | translate) : ('left_panel.open' | translate)) + ' ' + ('left_panel.map' | translate)
+          " 
+          matTooltipPosition="right"
+        >
+          <img class="menu-image" src="../../../assets/images/menu/carte.svg" />
+          <span>{{ "left_panel.map" | translate }}</span>
+        </mat-list-option>
+
+        <mat-list-option
+          class="primaryColor"
+          *ngIf="store.user?.is_superuser || store.user.maps.includes(2)"
+          fxFlex="130px"
+          (click)="parametersService.updateMapClicked()"
+          [value]="3"
+          [ngClass]="
+            current_selected == 3 ? 'menu-selected' : 'menu-not-selected'
+          "
+          [matTooltip]="
+          (current_selected == 3 ? ('left_panel.' + parametersService.toolTipText | translate) : ('left_panel.open' | translate)) + ' ' + ('left_panel.land' | translate)
+          " 
+          matTooltipPosition="right"
+        >
+          <img class="menu-image" src="../../../assets/images/menu/carte.svg" />
+          <span>{{ "left_panel.land" | translate }}</span>
+        </mat-list-option>
+
+        <mat-list-option
+          *ngIf="store.user?.is_superuser"
+          class="primaryColor"
+          fxFlex="130px"
+          [value]="2"
+          [ngClass]="
+            current_selected == 2 ? 'menu-selected' : 'menu-not-selected'
+          "
+          [matTooltip]="'left_panel.layers' | translate"
+          matTooltipPosition="right"
+        >
+          <img
+            class="menu-image"
+            src="../../../assets/images/menu/couches.svg"
+          />
+          <span>{{ "left_panel.layers" | translate }}</span>
+        </mat-list-option>
+
+        <mat-list-option
+          *ngIf="store.user?.is_superuser"
+          class="primaryColor"
+          fxFlex="130px"
+          [value]="4"
+          [ngClass]="
+            current_selected == 4 ? 'menu-selected' : 'menu-not-selected'
+          "
+          [matTooltip]="'left_panel.users' | translate"
+          matTooltipPosition="right"
+        >
+          <img
+            class="menu-image"
+            src="../../../assets/images/menu/utilisateurs.svg"
+          />
+          <span>{{ "left_panel.users" | translate }}</span>
+        </mat-list-option>
+      </mat-selection-list>
+      <div style="margin: 10px">
+        <button class="button-profile" [matMenuTriggerFor]="menu">
+          <img
+            src="../../../assets/images/picto/compte.png"
+            width="60px"
+            fxFlex="60px"
+            class="user-profile"
+          />
+        </button>
+
+        <mat-menu #menu="matMenu" class="menu-profil">
+          <mat-list>
+            <mat-list-item class="bold">
+              <span *ngIf="store.user?.first_name"
+                >{{ store.user?.first_name }} {{ store.user?.last_name }}</span
+              >
+              <span *ngIf="!store.user?.first_name">{{
+                "user.no_name" | translate
+              }}</span>
+            </mat-list-item>
+            <mat-list-item style="font-size: 14px !important">
+              <mat-icon style="margin-right: 5px; font-size: 20px"
+                >email</mat-icon
+              >
+              <span>{{ store.user?.email }}</span>
+            </mat-list-item>
+          </mat-list>
+          <button mat-menu-item (click)="logOut()" class="red">
+            <mat-icon style="margin-right: 10px" class="red">logout</mat-icon>
+            <span>{{ "login.logout" | translate }}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </mat-drawer>
+  <mat-drawer-content>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

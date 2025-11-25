@@ -1,0 +1,171 @@
+@import "./theme.scss";
+@import './assets/scss/complement_ol.scss';
+
+/* You can add global styles to this file, and also import other style files */
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  margin: 0px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+::ng-deep .mat-sort-header-arrow {
+  color: #fff !important;
+}
+
+.dialogWithNoPadding {
+  mat-dialog-container {
+    padding: 0px !important;
+    border-radius: 0px !important;
+  }
+}
+
+
+.dialogWithNoContentPadding {
+  .mat-dialog-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+.modalWithoutRaduis {
+  mat-dialog-container {
+    border-radius: 0px !important;
+  }
+}
+
+.fullscreen-dialog {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: 100%;
+  height: 100%;
+}
+
+.modalWithoutBoxShadow{
+  mat-dialog-container {
+    box-shadow: none !important;
+  }
+}
+mat-icon {
+  cursor: pointer;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: #2872c2;
+}
+
+.mat-input-element {
+  color: grey !important;
+  font-weight: bold;
+}
+
+.mat-input-element:hover,
+.mat-input-element:focus {
+  color: #2872c2 !important;
+  font-weight: bold;
+}
+
+/***** spinner *****/
+.preloader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preloader-chasing-squares {
+  width: 100px;
+  height: 100px;
+  line-height: 19px;
+}
+
+.preloader-chasing-squares .square {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  opacity: 1;
+  // background: #666;
+}
+
+.preloader-chasing-squares .square {
+  animation: focusfade 2.8s infinite;
+}
+
+.preloader-chasing-squares .square:nth-child(1) {}
+
+.preloader-chasing-squares .square:nth-child(2) {
+  animation-delay: 0.7s;
+}
+
+.preloader-chasing-squares .square:nth-child(3) {
+  animation-delay: 2.1s;
+}
+
+.preloader-chasing-squares .square:nth-child(4) {
+  animation-delay: 1.4s;
+}
+
+.state-badje {
+  padding: 0.3em 0.6em 0.35em;
+  border-radius: 3px;
+  white-space: nowrap;
+  border: 1px solid;
+  font-size: 15px;
+}
+
+@keyframes focusfade {
+  0% {
+    opacity: 0.8;
+    background: #0d589c;
+  }
+
+  30% {
+    opacity: 0.4;
+    background: #0d589c;
+  }
+
+  60% {
+    opacity: 0;
+  }
+
+  75% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0.8;
+    background: #0d589c;
+  }
+}
+
+.icons {
+  font-weight: 900 !important;
+}
+
+.carousel-slide {
+  background-size: contain !important;
+}
+
+.primary-snackbar {
+  background-color: #2872c2;
+  color: white;
+
+  button {
+    background-color: #fff;
+    color: #0d589c !important;
+  }
+}

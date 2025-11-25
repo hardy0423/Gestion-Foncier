@@ -1,0 +1,61 @@
+<div mat-dialog-content style="padding-top: 5px; max-height: 200px !important;" class="scroll">
+
+  <mat-tab-group *ngIf="tabsFields.length>1">
+    <mat-tab *ngFor="let tabs of tabsFields" [label]="tabs.onglet">
+      <div style="padding: 15px;">
+        <ng-container *ngFor="let field of tabs.fields">
+          <div fxLayout class="descriptive-sheet-body" style="margin-bottom: 10px" *ngIf="field.displayed">
+            <div fxFlex="100%" class="attribute">
+              <span fxFlex="38%" class="attribute-title">
+                <ng-container *ngIf="field.alias_fr; else no_alias">
+                  {{ field.alias_fr | translate }}
+                </ng-container>
+                <ng-template #no_alias>
+                  {{ field.name | translate }}
+                </ng-template>
+                :
+              </span>
+
+              <div fxFlex class="attribute-value">
+                <div *ngIf="isValidUrl(field.value) else notUrl">
+                  <a [href]="field.value" target="_blank"> {{ field.value | translate }} </a>
+                </div>
+                <ng-template #notUrl>
+                  <div>
+                    <span> {{ field.value | translate }} </span>
+                  </div>
+                </ng-template>
+              </div>
+
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <ng-container *ngIf="tabsFields.length==1">
+    <ng-container *ngFor="let field of fields; let i = index">
+      <ng-container *ngIf="field.displayed">
+        <div fxLayout class="descriptive-sheet-body" style="margin-bottom: 10px">
+          <div fxFlex="100%" class="attribute">
+            <span fxFlex="38%" class="attribute-title">
+              <ng-container *ngIf="field.alias_fr; else no_alias">
+                {{ field.alias_fr | translate }}
+              </ng-container>
+              <ng-template #no_alias>
+                {{ field.name | translate }}
+              </ng-template>
+              :
+            </span>
+
+            <div fxFlex class="attribute-value">
+              <div [innerHTML]="detectAndReplaceHttpsLinks(field.value)">
+                <!-- <span> {{ field.value | translate }} </span> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>

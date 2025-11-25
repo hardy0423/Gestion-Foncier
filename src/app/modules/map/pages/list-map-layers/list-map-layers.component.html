@@ -1,0 +1,117 @@
+
+<div class="list-group"><h3>{{ "map.layers_title" | translate }}</h3>
+
+  <mat-accordion class="headers-align" [multi]="true">
+    <ng-container *ngFor="let group of group_category">
+
+      <!-- IF uncategorized group -->
+      <mat-expansion-panel *ngIf="group.prefix == null" #panellayer hideToggle>
+        <mat-expansion-panel-header
+          [style.background]="group.group[0].color"
+          style="height: 5vh"
+          class="panel-header"
+          (click)="makeColor(group.group[0].color)"
+        >
+          <mat-panel-title class="white" style="max-width: calc(100%);"  [matTooltip]="group.group[0].name">
+            <h4 style="text-transform: uppercase" class="truncate">{{ group.group[0].name }}</h4>
+          </mat-panel-title>
+
+          <mat-checkbox 
+            *ngIf="showCheckBox(group.group[0])"
+            color="primary" 
+            class="checkbox-layer-choice"
+            (change)="enableAllLayers(list, $event.checked, panellayer)"
+            [checked]="checkAll(list, group.group[0])"
+          >
+          </mat-checkbox>
+        </mat-expansion-panel-header>
+
+        <mat-selection-list #list>
+          <mat-list-option
+            *ngFor="let layer of group.group[0].layers"
+            [matTooltip]="layer.name"
+            matTooltipClass="couche-toolipt"
+            matTooltipPosition="right"
+            [selected]="isLayerInMap(layer)"
+            [disabled]="shouldDisabled(layer)"
+            [value]="layer"
+          >
+            <img
+              mat-list-icon
+              [src]="env.backendUrl + layer.cercle_icon"
+              class="couche-img"
+            />
+            {{ layer.name }}
+            <mat-divider></mat-divider>
+          </mat-list-option>
+          <ng-container *ngIf="group.group[0].layers.length == 0">
+            <p align="center">{{ "map.no_layers_in_group" | translate }}</p>
+          </ng-container>
+        </mat-selection-list>
+      </mat-expansion-panel> <!-- END OF uncategorized group -->
+
+      <!-- IF categorized group -->
+      <mat-expansion-panel *ngIf="group.prefix != null" #panellayer hideToggle class="content-prefix">
+        <mat-expansion-panel-header
+          [style.background]="group.group[group.group.length-1].color"
+          style="height: 5vh"
+          class="panel-header prefix"
+          (click)="makeColor(group.group[group.group.length-1].color)"
+        >
+          <mat-panel-title class="white" style="max-width: calc(100%);"  [matTooltip]="group.prefix">
+            <h4 style="text-transform: uppercase" class="truncate">{{ group.prefix }}</h4>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <ng-container *ngFor="let group of group.group" >
+          <mat-expansion-panel  #panellayer hideToggle class="content-prefix-panel">
+            <mat-expansion-panel-header
+              [style.background]="group.color"
+              style="height: 5vh"
+              class="panel-header"
+              (click)="makeColor(group.color)"
+            >
+              <mat-panel-title class="white" style="max-width: calc(100%);"  [matTooltip]="group.name">
+                <h4 style="text-transform: uppercase" class="truncate">{{ group.name }}</h4>
+              </mat-panel-title>
+    
+              <mat-checkbox 
+                *ngIf="showCheckBox(group)"
+                color="primary" 
+                class="checkbox-layer-choice"
+                (change)="enableAllLayers(list, $event.checked, panellayer)"
+                [checked]="checkAll(list, group)"
+              >
+              </mat-checkbox>
+            </mat-expansion-panel-header>
+    
+            <mat-selection-list #list>
+              <mat-list-option
+                *ngFor="let layer of group.layers"
+                [matTooltip]="layer.name"
+                matTooltipClass="couche-toolipt"
+                matTooltipPosition="right"
+                [selected]="isLayerInMap(layer)"
+                [disabled]="shouldDisabled(layer)"
+                [value]="layer"
+              >
+                <img
+                  mat-list-icon
+                  [src]="env.backendUrl + layer.cercle_icon"
+                  class="couche-img"
+                />
+                {{ layer.name }}
+                <mat-divider></mat-divider>
+              </mat-list-option>
+              <ng-container *ngIf="group.layers.length == 0">
+                <p align="center">{{ "map.no_layers_in_group" | translate }}</p>
+              </ng-container>
+            </mat-selection-list>
+          </mat-expansion-panel>
+        </ng-container>
+
+      </mat-expansion-panel> <!-- END OF categorized group -->
+
+    </ng-container>
+  </mat-accordion>
+</div>

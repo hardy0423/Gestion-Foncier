@@ -1,0 +1,55 @@
+<button mat-fab color="warn" class="close-icon" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+
+<div class="content" fxLayout="column" >
+  <h1 fxFlex class="title">FORMULAIRE</h1>
+  <h4 fxFlex > Remarque : Uniquement les champs visibles sont affichés ici </h4>
+
+  <div fxFlex class="list">
+    <ng-container *ngIf="tabsField$ |async as tabsField">
+      <div cdkDropListGroup >
+        <div *ngFor="let element of tabsField" class="example-container" >
+          <div class="header">
+            <h2>{{ element.onglet }}</h2>
+            <div class="icon" *ngIf="element.onglet != 'Informations générales'">
+              <mat-icon class="pointer" (click)="onEditTabInstance(element.onglet)"
+                [matTooltip]="'layer.list_field.edit_tab_name' | translate">edit</mat-icon>&nbsp;
+              <mat-icon class="pointer" *ngIf="tabsField.length>1" (click)="onRemoveTabInstance(element)" [matTooltip]="'Supprimer l onglet'">
+                delete</mat-icon>
+            </div>
+          </div>
+
+          <div cdkDropList [cdkDropListData]="element.fields" class="example-list list-onglet" (cdkDropListDropped)="drop($event)">
+            <ng-container *ngFor="let item of element.fields" >
+              <div class="example-box"  cdkDrag>
+                <mat-icon class="drag">drag_indicator</mat-icon>
+                {{ item.alias_fr?item.alias_fr:item.name_field }}
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="btn-save white add" mat-flat-button color="primary" (click)="onAddTabInstance()">
+          <i class="fa fa-plus white"></i> &nbsp;
+          {{ "layer.list_field.add_tab" | translate }}
+        </button>
+      </div>
+    </ng-container>
+  </div>
+ 
+  <mat-spinner
+    style="position: absolute; left: 40%; top: 50%"
+    *ngIf="loading"
+  ></mat-spinner>
+
+  <div class="actions">
+    <button class="btn-save white" mat-flat-button color="accent" (click)="onSaveInstance()" style="margin-right: 20px">
+      {{ "layer.list_field.save" | translate }}
+    </button>
+    <button mat-stroked-button color="primary" (click)="close()">
+      {{ "cancel" | translate }}
+    </button>
+  </div>
+</div>

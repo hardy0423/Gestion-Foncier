@@ -1,0 +1,87 @@
+<div [hidden]="!toogle">
+
+  <div class="form-print">
+
+    <div class="header">
+      <i class="fa fa-window-close" (click)="toogle_impression()"></i>
+      <h4>Menu d'impression</h4>
+    </div>
+    <!-- <div class="header_fantome"> </div> -->
+    <div style="display: flex;flex-direction: column;padding: 10px;">
+
+      <mat-form-field>
+        <mat-select placeholder="{{ 'right_menu.tools.print.print_format' | translate }}" (selectionChange)="format_change()" [(value)]="layout_choisi.templates">
+          <mat-option *ngFor="let template of layout.templates" [value]="template">{{template.nom}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{ 'right_menu.tools.print.print_scale' | translate }} </mat-label>
+        <mat-select (selectionChange)="echelle_change()" [(value)]="echelle">
+
+          <mat-option *ngFor="let echelle of layoutScales" [value]="echelle.echelle">
+            {{echelle.nom}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div>
+        <form [formGroup]="impressionControl">
+          <mat-label style="color: rgba(0, 0, 0, 0.54);font-family: Roboto, Helvetica Neue, sans-serif;">{{ 'right_menu.tools.print.print_rotation' | translate }}
+          </mat-label>
+          <input matInput type="number" name="rotation" min="-90" max="90" step="10" placeholder="Tourner le format"
+            formControlName="rotation">
+        </form>
+        <!-- [(ngModel)]="layout_choisi.rotation" -->
+      </div>
+      <ng-container *ngIf="!isLandTemplate(layout_choisi.templates.nom_template)">
+        <mat-form-field>
+          <input matInput placeholder="{{ 'right_menu.tools.print.print_title' | translate}}" [(ngModel)]="layout_choisi.titre">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <textarea matInput rows="5" placeholder="{{ 'right_menu.tools.print.print_description' | translate }}"
+            [(ngModel)]="layout_choisi.description"></textarea>
+        </mat-form-field>
+      </ng-container>
+
+
+        <mat-slide-toggle 
+          [color]="'primary'"  
+          [(ngModel)]="layout_choisi.with_legend" >
+          {{ 'right_menu.tools.print.print_legend' | translate }}
+        </mat-slide-toggle>
+
+
+      <div style="padding-bottom: 15px;" *ngIf="layout_choisi.fond_exist">
+        <mat-checkbox color="primary" style="font-size: 14px;font-weight: bold" [(ngModel)]="layout_choisi.fond">
+          <span style="color: rgba(0, 0, 0, 0.54) !important;"> {{ 'right_menu.tools.print.print_add_aerial_picture' | translate }}  </span>
+        </mat-checkbox>
+      </div>
+
+
+      <!-- <div style="padding-bottom: 10px;font-family: Roboto, Helvetica Neue, sans-serif;font-size: 12px">
+    <span>NB: échelle courante de la carte </span>
+    <span color="primary" style="font-weight:bold"> 1/{{echelle_carte}} </span>
+  </div> -->
+
+    </div>
+    <!-- [disabled]="" -->
+    <div style="padding: 10px;">
+      <button mat-raised-button color="primary" style="width:100%;color: white;font-weight: bold;"
+      (click)="imprimer()" [disabled]="showLoading() || getListLayerToPrint().length==0">{{ 'right_menu.tools.print.toolpit_print' | translate }} 
+      <div *ngIf="showLoading()" id="loading" class="loading">
+        <mat-spinner color="primary" diameter="25"></mat-spinner>
+      </div>
+    </button>
+
+    </div>
+   
+
+  </div>
+
+  <div id="PrintFrame" #PrintFrame [ngStyle]="{'transform':getRotate()}">
+
+
+  </div>
+</div>

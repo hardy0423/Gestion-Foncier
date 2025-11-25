@@ -1,0 +1,129 @@
+<div class="content">
+  <button
+    (click)="onAddGroupInstance()"
+    mat-raised-button
+    color="primary"
+    style="border-radius: 25px"
+  >
+    {{ "layer.add_group" | translate }}
+  </button>
+</div>
+
+<div class="text-center loading-spinner">
+  <mat-spinner color="primary" diameter="50" *ngIf="loading"></mat-spinner>
+</div>
+
+<ng-container *ngIf="groups$ | async as groups">
+  <div class="list-group">
+    <mat-accordion>
+      <mat-expansion-panel
+        *ngFor="let group of groups"
+        [expanded]="store.expandedGroupId == group.group_id"
+        (opened)="store.expandedGroupId$.next(group.group_id)"
+      >
+        <mat-expansion-panel-header
+          [style.background]="group.color"
+          style="height: 5vh"
+          class="panel-header"
+        >
+          <mat-panel-title class="white" style="max-width: calc(100%);" >
+            <h3 style="text-transform: uppercase;width: 100%;" class="truncate">{{ group.name }}</h3>
+          </mat-panel-title>
+          <mat-panel-description style="justify-content: right;flex-grow: 0.5 !important;">
+            <mat-chip-list>
+              <mat-chip
+                *ngIf="!group.is_visible"
+                style="background-color: #ffffff !important"
+              >
+                <mat-icon matChipAvatar>lock_open</mat-icon>
+                {{ "layer.group.public" | translate }}
+              </mat-chip>
+              <mat-chip
+                *ngIf="group.is_visible"
+                style="background-color: #ffffff !important"
+              >
+                <mat-icon matChipAvatar>lock</mat-icon>
+                {{ "layer.group.restricted" | translate }}
+              </mat-chip>
+            </mat-chip-list>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="buttons-actions">
+          <button
+            mat-stroked-button
+            color="primary"
+            class="button-action"
+            (click)="onEditGroupInstance(group)"
+          >
+            {{ "layer.edit_this_group" | translate }}
+          </button>
+
+          <button
+            mat-stroked-button
+            color="warn"
+            class="button-action"
+            (click)="onDeleteGroupInstance(group)"
+            [disabled]="group.has_required"
+          >
+            {{ "layer.delete_this_group" | translate }}
+          </button>
+        </div>
+        <div>
+          <mat-selection-list [multiple]="false">
+            <div class="add-layer-btn" style="margin: 10px">
+              <button
+                mat-raised-button
+                color="primary"
+                class="btn-add"
+                (click)="onAddLayerInstance(group)"
+              >
+                {{ "layer.add_layer" | translate }}
+              </button>
+            </div>
+            <mat-list-option
+              *ngFor="let layer of group.layers"
+              (click)="onOpenLayerInstance(layer)"
+              [selected]="store.openedLayerId == layer.layer_id"
+            >
+              <img
+                mat-list-icon
+                [src]="env.backendUrl + layer.cercle_icon"
+                class="layer-img"
+              />
+              <div class="layer-name">
+                <span> {{ layer.name }}</span>
+                <div class="layer-actions-buttons">
+                  <div style="margin-right: 20px">
+                    <mat-icon
+                      color="primary"
+                      matTooltip="{{
+                        'layer.group.move_to_another_group' | translate
+                      }}"
+                      (click)="
+                        onChangeGroupInstance(layer, groups);
+                        $event.stopPropagation()
+                      "
+                      class="move-button"
+                      >drive_file_move</mat-icon
+                    >
+                  </div>
+                  <img
+                    src="../../../../../assets/images/picto/right-arrow.png"
+                    class="layer-img"
+                  />
+                </div>
+              </div>
+            </mat-list-option>
+          </mat-selection-list>
+
+          <ng-container *ngIf="group.layers.length == 0">
+            <p align="center">
+              {{ "map.no_layers_in_group" | translate }}
+            </p>
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</ng-container>

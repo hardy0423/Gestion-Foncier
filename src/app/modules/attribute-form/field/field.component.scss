@@ -1,0 +1,63 @@
+.success {
+    border: 1px solid #4caf50;
+}
+
+.error {
+    border: 1px dashed red;
+}
+
+.field-title-container{
+    display: flex;
+}
+.field-title-container h3{
+    width: 100%;
+}
+.delete-field-button{
+    background-color: transparent;
+    outline: none;
+    border: red solid 1px;
+    padding: 0.25rem;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 2.75rem;
+    height: 2.75rem;
+}
+.display-button{
+    outline: none;
+    border: none;
+    color: gray;
+    word-spacing: 1px;
+    background-color: transparent;
+    gap: 1rem;
+    display:flex;
+    flex:1;
+}
+.show{
+    display: block;
+}
+.hidden{
+    display: none;
+}
+.multiplechoices-button-container{
+    display: flex;
+    width: 100%;
+}
+.choice-container{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.choice-button{
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+    border: none;
+    justify-content: center;
+}
+
+.new-field ::ng-deep .mat-error {
+    font-weight: 600;
+    margin-bottom: -10px;
+  }

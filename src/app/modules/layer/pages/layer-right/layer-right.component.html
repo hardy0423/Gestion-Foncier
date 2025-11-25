@@ -1,0 +1,85 @@
+<div class="tab-switch">
+  <div class="border">
+    <div class="switch-container">
+      <div class="handle one" id="h"></div>
+      <div class="opt activated" id="one" (click)="read()">
+        {{ "user.right_read" | translate }}
+      </div>
+      <div class="opt" id="two" (click)="write()">
+        {{ "user.right_write" | translate }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div align="center" style="height: 10px;">
+  <div>
+    <mat-spinner color="primary" diameter="50" *ngIf="loading"></mat-spinner>
+  </div>
+</div>
+
+<div *ngIf="typeRight == 1" class="tabcontent">
+  <span class="title">
+    {{ "user.list_user_read" | translate }}
+    <span style="color: #18b33c">{{ layer.name }}</span>
+  </span>
+  <div class="btn-actions">
+    <button mat-raised-button color="primary" class="btn-add" (click)="onAddReadInstance()">
+      {{ "user.add_more_user" | translate }}
+    </button>
+  </div>
+
+  <ng-container *ngIf="groupRight$ | async as groupRight">
+    <mat-selection-list [multiple]="false" class="select-list">
+      <mat-list-option *ngFor="let group of groupRight.no_read">
+        <div class="layer-name">
+          {{ group.name }}
+          <mat-icon class="layer-img" (click)="onDeleteReadInstance(group)"
+            [matTooltip]="'user.remove_user_in_list' | translate">
+            delete
+          </mat-icon>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+
+    <ng-container *ngIf="groupRight.no_read.length == 0">
+      <p align="center">
+        {{ "user.layer_right_read_empty" | translate }}
+        <span style="color: #18b33c">{{ layer.name }}</span>
+      </p>
+    </ng-container>
+  </ng-container>
+</div>
+
+<div *ngIf="typeRight == 2" class="tabcontent">
+  <ng-container *ngIf="groupRight$ | async as groupRight">
+    <span class="title">
+      {{ "user.list_user_write" | translate }}
+      <span style="color: #18b33c">{{ layer.name }}</span>
+    </span>
+    <div class="btn-actions">
+      <button mat-raised-button color="primary" class="btn-add" (click)="onAddWriteInstance()">
+        {{ "user.add_more_user_write" | translate }}
+      </button>
+    </div>
+    <mat-selection-list [multiple]="false" class="select-list">
+      <mat-list-option *ngFor="let group of groupRight.write">
+        <div class="layer-name">
+          <span>
+            {{ group.name }}
+          </span>
+          <mat-icon class="layer-img" (click)="onDeleteWriteInstance(group)"
+            [matTooltip]="'user.remove_user_in_list' | translate">
+            delete
+          </mat-icon>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+    <ng-container *ngIf="groupRight.write.length == 0">
+      <p align="center">
+        {{ "user.layer_right_write_empty" | translate }}
+        <span style="color: #18b33c">{{ layer.name }}</span>
+      </p>
+    </ng-container>
+  </ng-container>
+</div>

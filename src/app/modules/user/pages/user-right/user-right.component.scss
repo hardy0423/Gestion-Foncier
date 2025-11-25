@@ -1,0 +1,137 @@
+.border {
+  padding: 20px;
+}
+
+.switch-container {
+  margin: 10px auto;
+  position: relative;
+  width: 375px;
+  height: 45px;
+  border-radius: 36px;
+  background: transparent;
+  border: 1px solid #2872c2;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.handle {
+  position: absolute;
+  box-sizing: border-box;
+  width: 180px;
+  height: 37px;
+  border-radius: 36px;
+  background: #2872c2;
+  border: 1px solid #2872c2;
+  transition: 0.5s;
+  left: 0;
+  z-index: 0;
+}
+
+.opt {
+  text-align: center;
+  flex: 1 0 180px;
+  font-size: 16px;
+  font-family: sans-serif;
+  transition: 0.3s;
+  color: #2872c2;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.opt.activated {
+  color: white;
+  cursor: auto;
+}
+
+.handle.one {
+  left: 4px;
+}
+
+.handle.two {
+  left: 50%;
+}
+
+.hide {
+  display: none;
+}
+
+.tabcontent {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+
+  .title {
+    margin: 0px 15px 20px 15px;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .btn-actions {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-right: 25px;
+    margin-bottom: 10px;
+
+    .btn-add {
+      border-radius: 25px;
+    }
+  }
+
+  .select-list {
+    margin: 15px 0 0 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+
+    ::ng-deep .mat-list-item-content {
+      padding: 0 !important;
+    }
+
+    ::ng-deep .mat-list-text {
+      padding: 0 !important;
+    }
+
+    ::ng-deep .mat-list-option:hover {
+      background-color: transparent !important;
+      cursor: initial;
+    }
+
+    ::ng-deep .mat-list-option:focus {
+      background-color: transparent !important;
+      cursor: initial;
+    }
+
+    .layer-img {
+      width: 35px !important;
+      height: 35px !important;
+      border-radius: 15px !important;
+      color: red;
+    }
+
+    .layer-name {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px 0 10px;
+
+      .name {
+        width: 95%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  ::ng-deep p {
+    margin: 30px !important;
+  }
+
+  .group_class {
+    color: #18b33c;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

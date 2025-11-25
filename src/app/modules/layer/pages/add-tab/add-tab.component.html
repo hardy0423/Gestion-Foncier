@@ -1,0 +1,51 @@
+<button mat-fab color="primary" class="close-icon" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+<div class="content">
+  <h1 class="title">
+    <ng-container *ngIf="data.update; else create">
+      {{ "layer.list_field.update_tab" | translate }}
+    </ng-container>
+    <ng-template #create>
+      {{ "layer.list_field.add_tab" | translate }}
+    </ng-template>
+  </h1>
+  <form [formGroup]="form" *ngIf="form as context" class="formgroup">
+    <mat-form-field appearance="outline" color="primary" style="width: 100%">
+      <mat-label>{{ "layer.list_field.tab_name" | translate }} </mat-label>
+      <input matInput formControlName="name" type="text" name="name" />
+      <mat-error *ngIf="context.get('name').errors?.['required']">
+        {{ "layer.list_field.tab_name_required" | translate }}
+      </mat-error>
+      <mat-error *ngIf="context.get('name').errors?.['forbiddenName']">
+        {{ "layer.list_field.tab_name_forbidden" | translate }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      color="accent"
+      class="btn-submit"
+      (click)="save()"
+      [disabled]="!form.valid"
+    >
+      <ng-container *ngIf="data.update; else creation">
+        {{ "valid" | translate }}</ng-container
+      >
+      <ng-template #creation>{{
+        "layer.list_field.add_tab" | translate
+      }}</ng-template>
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="close()"
+      class="btn-submit"
+    >
+      {{ "cancel" | translate }}
+    </button>
+  </div>
+</div>

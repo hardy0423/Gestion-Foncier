@@ -1,0 +1,184 @@
+<div
+  cdkDropList
+  style="padding-bottom: 20px"
+  (cdkDropListDropped)="drop($event)"
+>
+  <div *ngFor="let layer of layersInToc" cdkDrag cdkDragLockAxis="y">
+    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+    <mat-card
+      class="table-of-contents-card"
+      [style.height]="
+        layer?.data?.layer?.providers[0]?.vs?.category?.length > 1
+          ? '200px'
+          : '150px'
+      "
+    >
+      <mat-chip-list
+        style="position: absolute; top: -10px; left: 5px"
+        *ngIf="layer.badge"
+      >
+        <mat-chip
+          style="padding: 5px 5px; min-height: 20px; font-size: 11px"
+          class="white"
+          [ngStyle]="{ background: layer.badge.bgColor }"
+        >
+          {{ layer.badge.text }}
+        </mat-chip>
+      </mat-chip-list>
+
+      <div mat-card-image class="table-of-contents-card-img">
+        <img [src]="layer.image" [alt]="layer.nom" />
+      </div>
+
+      <mat-card-content>
+        <p>
+          <i
+            #ignoredButton
+            class="fa fa-eye-dropper pointer edit-color primaryColor"
+            (click)="layer.data.layer.providers[0]?.vs?.category?.length == 0 ? toggleColorPicker(layer) : openDialogCategorySymbology(layer.data.layer.providers[0], layer)"
+            matTooltip="{{ 'couche_en_cours.edit_color' | translate }}"
+            matTooltipPosition="left"
+            style="font-size: 15px; margin-right: 3px;"
+            *ngIf="userHasRight(layer.data)"
+          >
+          <input #ignoredInput
+          [id]="color"
+          [cpOKButton]="true"
+          [cpOKButtonText]="'layer.select_color' | translate"
+          [cpOKButtonClass]= "'btn btn-primary btn-xs butt pointer'"
+          [cpOutputFormat]="'hex'"
+          [(colorPicker)]="default_color" 
+          [style.background]="default_color"
+          [cpPosition]="'bottom'"
+          [cpPositionRelativeToArrow]="true"
+          (colorPickerSelect) ="onEventLog($event, layer)"
+          [cpSaveClickOutside] = "false"
+          [cpIgnoredElements]="[ignoredButton, ignoredInput]"
+          [(cpToggle)]="layer.isToggle"
+          class="inputColor"
+        />
+        </i>
+          <i
+            class="fa fa-info-circle pointer primaryColor"
+            matTooltip="{{ 'couche_en_cours.metadata_info' | translate }}"
+            style="margin-right: 10px; font-size: 17px"
+            (click)="openLayerMetaData(layer)"
+          ></i>
+          <i
+            class="fa fa-list pointer primaryColor"
+            *ngIf="layer['properties']['type'] == 'couche'"
+            matTooltip="{{ 'couche_en_cours.table_attribut' | translate }}"
+            style="margin-right: 10px; font-size: 15px"
+            (click)="openAttributesTable(layer)"
+          ></i>
+          <i
+            class="fa fa-share-alt pointer primaryColor"
+            *ngIf="layer.tocCapabilities.share"
+            (click)="shareLayer(layer)"
+            matTooltip="{{ 'couche_en_cours.partager_couche' | translate }}"
+            style="margin-right: 10px; font-size: 15px"
+          ></i>
+          <i
+            class="fa fa-trash pointer"
+            (click)="removeLayer(layer)"
+            matTooltip="{{ 'couche_en_cours.supprimer_couche' | translate }}"
+            style="font-size: 15px; color: rgb(242, 79, 79)"
+          ></i>
+        </p>
+
+        <mat-slider
+          *ngIf="layer.tocCapabilities.opacity"
+          (change)="setOpactiyOfLayer($event, layer)"
+          style="width: 100%"
+          [max]="100"
+          [min]="0"
+          color="primary"
+          [thumbLabel]="true"
+          [value]="getOpacityOfLayer(layer.layer[0].id)"
+        ></mat-slider>
+      </mat-card-content>
+      <mat-card-actions>
+        <mat-checkbox
+          labelPosition="after"
+          color="primary"
+          [(ngModel)]="layer.visible"
+          (change)="setVisibleOfLayer($event, layer)"
+        >
+          <span class="truncate" [matTooltip]="layer.nom">{{ layer.nom }}</span> 
+        </mat-checkbox>
+        <div
+          class="wms-filter"
+          *ngIf="layer?.data?.layer?.providers[0]?.vs?.category?.length > 1"
+        >
+          <mat-accordion>
+            <mat-expansion-panel 
+            class="mat-elevation-z2" 
+            togglePosition="before"
+            (opened)="setPanelStatus(layer.data.layer.layer_id, true)"
+            (closed)="setPanelStatus(layer.data.layer.layer_id, false)"
+            [expanded]="getPanelStatus(layer.data.layer.layer_id)"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title> 
+                  <ng-container *ngIf="getSelectedCategoryLength(layer.data.layer.layer_id) > 0">
+                    <mat-chip color="warn" selected style="margin-right: 10px;">
+                      {{getSelectedCategoryLength(layer.data.layer.layer_id)}}
+                    </mat-chip> {{ 'map.layers_control.selected_categories' | translate }}
+                  </ng-container>
+                  <ng-container *ngIf="getSelectedCategoryLength(layer.data.layer.layer_id) == 0">
+                    {{ 'map.layers_control.show_categories' | translate }}
+                  </ng-container>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div style="max-height: 180px; overflow: auto;">
+                <app-wms-filter
+                  [layer]="layer.data.layer.providers[0]"
+                  [selectedCategories]="layer.layer[0]['metadata']['categoryStyles']['list']"
+                  (optionsSelected$)="
+                    setOptionsSelected([$event, layer.data.layer.layer_id])
+                  "
+                ></app-wms-filter>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<div class="table-of-contents-footer primaryColorBG white">
+  <div fxLayout="row" style="height: 100%">
+    <div
+      fxFlex="50%"
+      style="padding: 5px"
+      matTooltip="{{ 'couche_en_cours.tout_partager_toolpit' | translate }}"
+      matTooltipPosition="left"
+      class="pointer"
+      (click)="shareAllLayersInToc()"
+    >
+      <div class="text-center" style="height: 50%">
+        <i class="fa fa-share-alt white" style="font-size: 15px"></i>
+      </div>
+      <div class="text-center" style="height: 50%; font-size: 12px">
+        {{ "couche_en_cours.tout_partager" | translate }}
+      </div>
+    </div>
+
+    <div fxFlex="50%" style="padding: 5px" class="pointer" (click)="clearMap()">
+      <div class="text-center" style="height: 50%">
+        <i class="fa fa-trash pointer white" style="font-size: 15px"></i>
+      </div>
+      <div class="text-center" style="height: 50%; font-size: 12px">
+        {{ "couche_en_cours.tout_supprimer" | translate }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-container>
+  <div class="text-center loading-spinner" *ngIf="loading">
+    <mat-spinner color="primary" diameter="50"></mat-spinner>
+  </div>
+</ng-container>

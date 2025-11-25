@@ -1,0 +1,196 @@
+<ng-container *ngIf="{ user: user$ | async } as userO">
+  <div class="login">
+    <div class="parent">
+      <div class="plane">
+        <img
+          src="../../../../../assets/images/login/avion2.png"
+          class="img-plane"
+        />
+      </div>
+      <div class="page container">
+        <img
+          class="logo"
+          src="../../../../../assets/images/logo/logo_bale_mulhouse_blanc.png"
+        />
+        <h1 class="sig white">{{ "login.title" | translate }}</h1>
+        <div class="loading">
+          <mat-progress-bar
+            mode="indeterminate"
+            class="progress-bar"
+          ></mat-progress-bar>
+        </div>
+        <div class="hello-user">
+          <span>{{ name }}</span>
+        </div>
+        <div class="content">
+          <div class="bloc">
+            <mat-spinner
+              style="position: absolute; left: 48.5%; top: 38%"
+              diameter="50"
+              *ngIf="isLoadingLogin"
+            ></mat-spinner>
+            <div class="animate__animated go-to-email">
+              <button class="button-element" (click)="animationsEmail()">
+                <img
+                  class="button-switch button-go-to-email"
+                  src="../../../../../assets/images/login/button-email.png"
+                />
+              </button>
+            </div>
+            <div class="field">
+              <form [formGroup]="form" *ngIf="form as context">
+                <div class="animate__animated field-email">
+                  <mat-form-field
+                    appearance="legacy"
+                    class="div-field white"
+                    color="primary"
+                  >
+                    <mat-label class="white">{{
+                      "login.email" | translate
+                    }}</mat-label>
+                    <input
+                      matInput
+                      formControlName="username"
+                      type="username"
+                      name="username"
+                      (keyup.enter)="onSubmitEmailInstance()"
+                    />
+                    <img
+                      src="../../../../../assets/images/login/user.png"
+                      class="icon-input"
+                      matPrefix
+                    />
+                    <mat-error
+                      *ngIf="context.get('username').errors?.['required']"
+                    >
+                      {{ "user.email_required" | translate }}
+                    </mat-error>
+                    <mat-error
+                      *ngIf="context.get('username').errors?.['invalidAsync']"
+                    >
+                      {{ "user.user_not_found" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="animate__animated field-password">
+                  <mat-form-field
+                    appearance="legacy"
+                    class="div-field white"
+                    color="primary"
+                  >
+                    <mat-label class="white">
+                      <ng-container *ngIf="urlSlugValid; else password_normal">
+                        {{ "login.define_password" | translate }}
+                      </ng-container>
+                      <ng-template #password_normal>
+                        {{ "login.password" | translate }}
+                      </ng-template>
+                    </mat-label>
+                    <input
+                      matInput
+                      formControlName="password"
+                      [type]="hide ? 'password' : 'text'"
+                      name="password"
+                      (keyup.enter)="onSubmitPasswordInstance()"
+                    />
+                    <img
+                      src="../../../../../assets/images/login/padlock.png"
+                      class="icon-input"
+                      matPrefix
+                    />
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="hide = !hide"
+                      [attr.aria-label]="'login.hide_password' | translate"
+                      [attr.aria-pressed]="hide"
+                      type="button"
+                    >
+                      <ng-container *ngIf="hide; else show">
+                        <i class="fa-solid fa-eye icon-input" matPrefix></i>
+                      </ng-container>
+                      <ng-template #show>
+                        <i
+                          class="fa-solid fa-eye-slash icon-input"
+                          matPrefix
+                        ></i>
+                      </ng-template>
+                    </button>
+
+                    <mat-error
+                      *ngIf="
+                        context.get('password').value &&
+                        context.get('password').value.length < 8
+                      "
+                    >
+                      {{ "user.password_correct" | translate }}
+                    </mat-error>
+                    <mat-error
+                      *ngIf="context.get('password').errors?.['required']"
+                    >
+                      {{ "user.password_required" | translate }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </form>
+              <div class="animate__animated forget-password pointer">
+                <a (click)="onForgotPasswordInstance()">{{
+                  "login.user_forget_password" | translate
+                }}</a>
+              </div>
+
+              <div class="animate__animated radio-element">
+                <div class="circle" (click)="animationsEmail()">
+                  <div class="radio-checked"></div>
+                </div>
+                <div
+                  class="circle"
+                  (click)="
+                    form.get('username').valid
+                      ? onSubmitEmailInstance()
+                      : errorValidation(1)
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <div class="animate__animated go-to-next">
+              <button
+                *ngIf="!showPassword"
+                class="button-element"
+                (click)="
+                  form.get('username').valid
+                    ? onSubmitEmailInstance()
+                    : errorValidation(1)
+                "
+              >
+                <img
+                  class="button-switch"
+                  src="../../../../../assets/images/login/button-email.png"
+                />
+              </button>
+              <button
+                *ngIf="showPassword"
+                class="button-element"
+                (click)="
+                  form.get('password').valid
+                    ? urlSlugValid
+                      ? onUpdatePasswordInstance()
+                      : onSubmitPasswordInstance()
+                    : errorValidation(2)
+                "
+              >
+                <img
+                  class="button-switch"
+                  src="../../../../../assets/images/login/entrer-image.png"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<notifier-container></notifier-container>

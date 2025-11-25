@@ -1,0 +1,255 @@
+<mat-drawer-container class="drawer-container" hasBackdrop="false">
+  <mat-drawer #drawer mode="over" position="end" style="width: 25vw" autoFocus="false">
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="btn-actions">
+      <button (click)="onAddUserInstance()" mat-flat-button color="primary" class="btn-add">
+        {{ "user.add_user_btn" | translate }}
+      </button>
+
+      <button (click)="onManageGroupsInstance()" mat-stroked-button color="primary" class="btn-add"
+        style="margin-left: 10px">
+        {{ "user.manage_group" | translate }}
+      </button>
+      <button (click)="toogleShowFilters()" mat-stroked-button color="primary" class="btn-add"
+        style="margin-left: 10px">
+        <ng-container *ngIf="!showFilters">
+          <mat-icon>filter_alt</mat-icon>
+          {{ 'map.attribute_tables.activate_filter' | translate }}
+        </ng-container>
+        <ng-container *ngIf="showFilters">
+          <mat-icon>filter_alt_off</mat-icon>
+          {{ 'map.attribute_tables.desactivate_filter' | translate }}
+        </ng-container>
+      </button>
+    </div>
+
+    <div class="container-user">
+      <div class="button-add-group" [ngClass]="selection.selected.length > 0 ? 'show' : 'hide'">
+        <button (click)="onAddUserGroupInstance()" mat-raised-button color="accent">
+          {{ "user.add_group_users" | translate }}
+        </button>
+      </div>
+
+      <ng-container *ngIf="loading">
+        <div class="text-center loading-spinner" [class.loading-start]="loadingStart === true" [class.loading-filter]="showFilters === true">
+          <mat-spinner color="primary" diameter="50"></mat-spinner>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="users$ | async as users">
+        <div class="list-user">
+            <div class="list-users">
+              <div fxFlex class="list-users-body">
+                <div #scroll class="list-users-body-table scroll">
+                  <table mat-table matSort matSortActive="created_at" matSortDisableClear matSortDirection="desc"
+                    [dataSource]="users" class="list-users-body-table" [formGroup]="searchForm">
+                    <ng-container matColumnDef="check">
+                      <th mat-header-cell disableClear *matHeaderCellDef>
+                        <mat-checkbox *ngIf="!loading" (change)="$event ? toggleAllRows(users) : null"
+                          [checked]="selection.hasValue() && isAllSelected(users)" [indeterminate]="
+                            selection.hasValue() && !isAllSelected(users)
+                          ">
+                        </mat-checkbox>
+                      </th>
+                      <td mat-cell *matCellDef="let element" [ngClass]="element.is_active ? '' : 'element-inactive'">
+                        <div class="checkbox-row">
+                          <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(element) : null"
+                            [checked]="selection.isSelected(element)"></mat-checkbox>
+                        </div>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_check">
+                      <th mat-header-cell *matHeaderCellDef></th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="last_name">
+                      <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>
+                        {{ "user.last_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element" [ngClass]="element.is_active ? '' : 'element-inactive'">
+                        {{ element.last_name }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="search_last_name">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container">
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{
+                                'map.attribute_tables.search' | translate
+                              }}" formControlName="last_name" />
+                          </mat-form-field>
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="first_name">
+                      <th mat-header-cell mat-sort-header disableClear *matHeaderCellDef>
+                        {{ "user.first_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element" [innerHTML]="element.first_name"
+                        [ngClass]="element.is_active ? '' : 'element-inactive'"></td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_first_name">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container">
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{
+                                'map.attribute_tables.search' | translate
+                              }}" formControlName="first_name" />
+                          </mat-form-field>
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="email">
+                      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                        {{ "user.email" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element" [innerHTML]="element.email"
+                        [ngClass]="element.is_active ? '' : 'element-inactive'"></td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_email">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container">
+                          <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{
+                                'map.attribute_tables.search' | translate
+                              }}" formControlName="email" />
+                          </mat-form-field>
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="entreprise">
+                      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                        {{ "entreprise.name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element" [innerHTML]="element.entreprise_name"
+                        [ngClass]="element.is_active ? '' : 'element-inactive'"></td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_entreprise">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container">
+                          <mat-form-field appearance="outline" style="text-transform: none">
+                            <mat-label>{{ 'user.entreprise' | translate }}</mat-label>
+                            <mat-select formControlName="entreprise">
+                              <mat-option>{{ 'user.all' | translate }}</mat-option>
+                              <mat-option *ngFor="let entreprise of store.enterprises" [value]="entreprise.entreprise_id">
+                                {{ entreprise.name }}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="is_superuser">
+                      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                        {{ "user.admin" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element" [ngClass]="element.is_active ? '' : 'element-inactive'">
+                        <ng-container *ngIf="element.is_superuser; else not_admin">
+                          {{ "user.admin" | translate }}
+                        </ng-container>
+                        <ng-template #not_admin>
+                          {{ "user.not_admin" | translate }}
+                        </ng-template>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_is_superuser">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container">
+                          <mat-form-field appearance="outline" style="text-transform: none">
+                            <mat-label>{{ 'user.user_permission' | translate }}</mat-label>
+                            <mat-select formControlName="is_superuser">
+                              <mat-option>{{ 'user.all' | translate }}</mat-option>
+                              <mat-option value="true">{{ 'user.admin' | translate }}</mat-option>
+                              <mat-option value="false">{{ 'user.not_admin' | translate }}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="group">
+                      <th mat-header-cell mat-sort-header *matHeaderCellDef>{{ 'user.group' | translate }}</th>
+                      <td mat-cell *matCellDef="let element" [ngClass]="element.is_active ? '' : 'element-inactive'">
+                        <ng-container *ngIf="element.group_name; else no_group">
+                          {{ element.group_name }}
+                        </ng-container>
+                        <ng-template #no_group>
+                          {{ "user.no_group" | translate }}
+                        </ng-template>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_group">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container" *ngIf="groups$ | async">
+                          <mat-form-field appearance="outline" style="text-transform: none">
+                            <mat-label>{{ 'user.group' | translate }}</mat-label>
+                            <mat-select formControlName="group">
+                              <mat-option>{{ 'user.all' | translate }}</mat-option>
+                              <mat-option *ngFor="let group of store.groupUsers" [value]="group.id">{{ group.name }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          <!-- <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{
+                                'map.attribute_tables.search' | translate
+                              }}" formControlName="group" />
+                          </mat-form-field> -->
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="is_active">
+                      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+                        {{ "user.active_status" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element" [ngClass]="element.is_active ? '' : 'element-inactive'">
+                        <ng-container *ngIf="element.is_active; else not_active">
+                          {{ "user.active" | translate }}
+                        </ng-container>
+                        <ng-template #not_active>
+                          {{ "user.not_active" | translate }}
+                        </ng-template>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="search_is_active">
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class="filters-container">
+                          <mat-form-field appearance="outline" style="text-transform: none">
+                            <mat-label>{{ 'user.active_status' | translate }}</mat-label>
+                            <mat-select formControlName="is_active">
+                              <mat-option>{{ 'user.all' | translate }}</mat-option>
+                              <mat-option value="true">{{ 'user.active' | translate }}</mat-option>
+                              <mat-option value="false">{{ 'user.not_active' | translate }}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </th>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-header-row *matHeaderRowDef="searchColumns; sticky: true" style="height: unset"
+                      [hidden]="!showFilters"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="
+                        row.is_active ? 'element-row' : 'element-row-inactive'
+                      " (click)="onEditUserInstance(row)"></tr>
+                  </table>
+                  <ng-container *ngIf="users.length == 0">
+                    <div class="no-data">
+                      <h3>{{ "user.no_user_found" | translate }}</h3>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+        </div>
+      </ng-container>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+<notifier-container></notifier-container>

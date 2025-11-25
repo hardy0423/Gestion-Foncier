@@ -1,0 +1,72 @@
+.ol-zoom-out, .ol-zoom-in{
+    padding: 0px;
+    border: none;
+    background: transparent;
+}
+
+.ol-zoom-out:focus, .ol-zoom-in:focus{
+    outline: none;
+}
+.ol-rotate-reset{
+    background: transparent;
+    padding: 0px;
+    border: none;
+}
+.ol-rotate-reset:focus {
+    outline: none;
+}
+
+.faCompass svg{
+    transform: rotate(-46deg);
+}
+.ol-overlaycontainer-stopevent{
+    .ol-zoom{
+        display: none;
+    }
+  }
+  .ol-control button{
+    height: unset !important;
+    width: unset !important;
+    line-height: unset !important;
+    background-color: unset !important;
+    margin: unset !important;
+  }
+  .ol-control{
+    position: unset !important;
+    background: unset !important;
+  }
+  .ol-control button:hover, .ol-control button:focus {
+    outline: none;
+  }
+  .ol-attribution{
+    background: rgba(255,255,255,0.8) !important;
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
+    font-size: 10px;
+    position: absolute !important;
+  }
+.tooltip.tooltip-static,.tooltip.tooltip-measure{
+    background-color: #3a3a3a;
+    color: white;
+    border-radius: 5px;
+    padding: 1px 3px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.tooltiphelp.hidden,.tooltiphelp{
+    background-color: white;
+    color: #3a3a3a;
+    border-radius: 5px;
+    padding: 1px 2px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.ol-scale-line-inner{
+    font-size: 13px !important;
+}
+.ol-scale-line{
+    background: rgba(98,19,28,0.8) !important;
+    position: absolute;
+}

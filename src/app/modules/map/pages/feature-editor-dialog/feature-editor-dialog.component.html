@@ -1,0 +1,17 @@
+<h1 mat-dialog-title class="white primaryColorBG">
+  <span class="bold" style="font-size: 17px"
+    >{{ 'map.edit.dialog_title' | translate }}
+  </span>
+  <i class="fa fa-times whiteointer close" (click)="close()"></i>
+</h1>
+
+<mat-dialog-content style="display: unset!important;">
+  <app-digitaliser
+    style="position: relative; display: contents"
+    (close)="closeDialod($event)"
+    [data]="data"
+    [layersToDigitalise]="data.layersToDigitalise"
+    [basemapsDigitaliser]="data.basemaps"
+    [mapData]="data.map"
+    ></app-digitaliser>
+</mat-dialog-content>

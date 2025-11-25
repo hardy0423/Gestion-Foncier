@@ -1,0 +1,65 @@
+<h1
+  mat-dialog-title
+  class="primaryColorBG white"
+  cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane"
+  cdkDragHandle
+  style="position: relative"
+>
+  <span>
+    <div class="metadata-header-ghost" cdkDragHandle></div>
+    <img
+      [src]="environment.backendUrl + dataOsmLAyer?.layer.cercle_icon"
+      alt=""
+      srcset=""
+      class="icon_header"
+      style="margin-top: 4px; height: 25px"
+    />
+    {{ dataOsmLAyer?.layer.name }}
+  </span>
+  <i mat-dialog-close class="fa fa-times pointer close"></i>
+</h1>
+
+<div mat-dialog-content style="padding-bottom: 10px !important;">
+    <table class="tg metadata">
+      <tbody>
+        <tr>
+          <td class="tg-0lax">{{ 'couche_en_cours.source_meta' | translate }} :</td>
+          <td class="tg-0lax">
+            {{ data?.source || '-' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">{{ 'couche_en_cours.link_meta' | translate }} :</td>
+          <td class="tg-0lax">
+            <span *ngIf="!data?.link_meta">
+              -
+            </span>
+            <span *ngIf="data?.link_meta">
+              <a [href]="data?.link_meta" target="_blank">
+                {{ data?.link_meta }}
+              </a>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">{{ 'couche_en_cours.description_meta' | translate }} :</td>
+          <td class="tg-0lax">
+            {{ data?.description || '-' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">{{ 'couche_en_cours.admin_meta' | translate }} :</td>
+          <td class="tg-0lax">
+            {{ data?.admin_meta || '-' }}
+          </td>
+        </tr>
+        <tr>
+          <td class="tg-0lax">{{ 'couche_en_cours.date_meta' | translate }} :</td>
+          <td class="tg-0lax">
+            {{ data?.date_meta || '-' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>

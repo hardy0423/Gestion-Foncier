@@ -1,0 +1,108 @@
+.search-container {
+  margin: 15px auto;
+}
+
+.searchbar {
+  border-radius: 15px;
+  background-color: #f5f8fb; // rgba(255, 255, 255, 0.9);
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 30px;
+
+  & > * {
+    margin: 0 6px;
+  }
+}
+
+.search-input {
+  background: none;
+  border: none;
+  outline: 0;
+  height: 24px;
+  width: 100%;
+  margin-right: 0px;
+  font-size: 16px;
+
+  &::placeholder {
+    font-size: 12px;
+    font-style: italic;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.truncate {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 234px;
+  margin: 5px 0;
+}
+
+.mat-option {
+  height: 50px;
+  line-height: 18px;
+  .search-form-option-img {
+    height: 32px;
+    width: 32px;
+    float: left;
+    margin-right: 10px;
+  }
+  .search-form-option-badge {
+    float: right;
+    margin-top: 10px;
+    margin-right: 7px;
+  }
+}
+
+::ng-deep .single-autocomplete {
+  max-height: 600px !important;
+}
+
+::ng-deep .mat-autocomplete-panel {
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+::ng-deep .cdk-overlay-connected-position-bounding-box {
+  max-height: 45vh;
+}
+
+::ng-deep .mat-icon-button.icon-btn {
+  width: 20px !important;
+  color: #0d589c;
+  &:hover {
+    color: #4185c4;
+  }
+}
+
+.content-parcelle {
+  padding: 40px 25px !important;
+}
+
+.item-parcelle {
+  display: flex;
+  flex-direction: column;
+
+  .section-name {
+    font-size: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .proprietaire {
+    font-size: 15px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .idu {
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

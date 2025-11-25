@@ -1,0 +1,61 @@
+<h1 mat-dialog-title>
+  <span class="bold primaryColor" style="font-size: 17px"
+    >Ajouter un group aux utilisateurs séléctionnés
+  </span>
+  <i mat-dialog-close class="fa fa-times primaryColor pointer close"></i>
+</h1>
+<mat-dialog-content>
+  <form [formGroup]="form" *ngIf="form as context" class="content">
+    <mat-form-field
+      appearance="outline"
+      class="input-entreprise"
+      style="width: 100%"
+    >
+      <mat-label>Groupe</mat-label>
+      <mat-select formControlName="group_id">
+        <ng-container *ngIf="listGroupes$ | async as listGroupes">
+          <mat-option *ngFor="let group of listGroupes" [value]="group.id">
+            {{ group.name }}
+          </mat-option>
+        </ng-container>
+      </mat-select>
+      <button
+        mat-button
+        *ngIf="context.get('group_id').value != null"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="
+          context.get('group_id').setValue(null); $event.stopPropagation()
+        "
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div
+      mat-dialog-actions
+      class="actions"
+      style="display: flex; justify-content: space-around"
+    >
+      <button
+        mat-raised-button
+        [disabled]="!form.valid"
+        color="primary"
+        style="width: 45%"
+        (click)="onAddInstance()"
+      >
+        {{ "add" | translate }}
+      </button>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        style="width: 45%"
+        (click)="dialogRef.close(false)"
+      >
+        {{ "cancel" | translate }}
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

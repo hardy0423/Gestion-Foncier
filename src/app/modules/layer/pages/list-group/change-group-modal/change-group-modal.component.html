@@ -1,0 +1,42 @@
+<button mat-fab color="primary" class="close-icon" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+<div class="content">
+  <h1 class="title">{{ 'layer.group.change_group' | translate }} {{data.layer.name}}</h1>
+
+  <form [formGroup]="form" class="groups-container">
+    <mat-selection-list formControlName="group_id" [multiple]="false">
+      <mat-list-option *ngFor="let group of data.groups" [value]="group.group_id">
+        <mat-divider></mat-divider>
+        <div class="group-item">
+          <div>
+            {{ group.name }}
+            <span *ngIf="group.group_id == data.layer.group" style="font-weight: bolder;">(groupe actuel)</span>
+          </div>
+            <mat-icon *ngIf="group.is_visible">lock</mat-icon>
+            <mat-icon *ngIf="!group.is_visible">lock_open</mat-icon>
+        </div>
+      </mat-list-option>
+    </mat-selection-list>
+  </form>
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      color="accent"
+      class="btn-submit"
+      (click)="onSubmitInstance()"
+      [disabled]="!form.valid || form.disabled"
+    >
+    {{ 'save' | translate}}
+    </button>
+
+    <button
+      mat-stroked-button
+      color="primary"
+      (click)="close()"
+      class="btn-submit"
+    >
+      {{ "cancel" | translate }}
+    </button>
+  </div>
+</div>

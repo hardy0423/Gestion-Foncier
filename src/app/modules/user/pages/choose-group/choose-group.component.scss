@@ -1,0 +1,14 @@
+@import "../../../../../theme.scss";
+@import "../../../../shared/modal-style.scss";
+@include mat-core();
+
+::ng-deep .mat-dialog-container {
+  border-radius: 20px !important;
+}
+
+.close-icon {
+  float: right;
+  transform: translate(21px, -21px);
+  width: 37px;
+  height: 37px;
+}

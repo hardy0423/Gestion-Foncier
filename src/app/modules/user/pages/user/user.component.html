@@ -1,0 +1,20 @@
+<div class="content">
+  <div class="header">
+    <img
+      class="logo-page"
+      src="../../../../../assets/images/logo/logo_bale_mulhouse.png"
+    />
+    <button mat-icon-button (click)="closeUser();" style="float: right" color="primary">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab [label]="'user.manage_user' | translate">
+    <app-list-user></app-list-user>
+  </mat-tab>
+  <mat-tab [label]="'user.manage_entreprise' | translate">
+    <app-list-entreprise></app-list-entreprise>
+  </mat-tab>
+</mat-tab-group>

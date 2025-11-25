@@ -1,0 +1,231 @@
+@import "../../../../../theme.scss";
+
+.sidenav {
+  background-color: #f5f8fb; // #ffffffb4 ;
+  border-top-right-radius: 20px;
+  transition: 500ms linear;
+  width: 26%;
+  top: 6px;
+
+  .sidenav-btn-close {
+    padding: 10px;
+  }
+
+  .sidenav-content {
+    padding: 25px;
+  }
+}
+
+.sidenav:hover {
+  background-color: #f5f8fb; //ffffff;
+  transition: 500ms linear;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+
+  .map-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+
+  .distance-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+  }
+
+  .distance-container > * {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 11px;
+    line-height: 18px;
+    display: block;
+    margin: 0;
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+
+  .search-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    .search-content {
+      height: 6% !important;
+      position: absolute;
+      bottom: 0;
+      top: 0;
+    }
+  }
+
+  .logo-map {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    position: relative;
+    height: 50px;
+    padding: 15px;
+  }
+  .logo-image {
+    width: 50%;
+    background-color: #ffff;
+    border-radius: 5px;
+    padding: 10px;
+  }
+}
+
+.sidenav-right-legend {
+  width: 270px !important;
+}
+
+.sidenav-right {
+  width: 270px;
+  .sidenav-right-content {
+    padding: 5px;
+    padding-top: 20px;
+  }
+
+  .sidenav-right-title {
+    color: $primary_color;
+    font-size: 13px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 5px 0px;
+    font-weight: bold;
+    position: fixed;
+    width: 218px;
+    z-index: 2;
+    top: 0px;
+    right: 0px;
+    height: 20px;
+    background-color: $primary_transparent_bg;
+  }
+
+  .sidenav-right-title-fake {
+    height: 29px;
+    background-color: $primary_transparent_bg;
+    top: 0px;
+    width: 218px;
+  }
+
+  app-download {
+    padding-bottom: 140px;
+  }
+}
+
+.toogle-sidenav-right {
+  position: absolute;
+  right: 0px;
+  top: 95px;
+  width: 65px;
+
+  ::ng-deep .mat-badge-content {
+    left: 39px !important;
+    top: -6px !important;
+  }
+}
+.impression, .gps, .elevation {
+  position: absolute;
+    bottom: 195px;
+    right: 9px;
+    z-index: 999;
+    background: white;
+    padding: 5px 7px;
+    text-align: center;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 10%);
+    cursor: pointer;
+    border-radius: 4px;
+}
+app-impression{
+  display: block;
+  position: relative;
+}
+
+.slide_toogle {
+  padding: 10px 7px;
+}
+
+.gps{
+  bottom: 230px;
+  padding: 5px 7px;
+}
+
+.elevation{
+  bottom: 265px;
+}
+
+.checked{
+  background: #2872c2;
+  color: white;
+}
+
+::ng-deep  .map-popup-elevation {
+  opacity: 0.7;
+  font-weight: bold;
+}
+
+::ng-deep  .map-popup-elevation .mapboxgl-popup-content, .maplibregl-popup-content{
+  padding: 5px 5px;
+  height: 20px;
+}
+
+::ng-deep  .map-popup-elevation .mapboxgl-popup-tip, .maplibregl-popup-tip {
+  border: 5px solid transparent;
+  border-bottom: none;
+  border-top-color: #fff;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 29px;
+  right: 1px;
+  z-index: 10;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.toogle-right-button {
+  position: absolute;
+  bottom: 96px;
+  right: 10px;
+  z-index: 999;
+  background: white;
+  padding: 4px 7px;
+  text-align: center;
+  box-shadow: 0 0 0 2px rgba(0 0 0 / 10%);
+  cursor: pointer;
+  border-radius: 4px;
+
+  ::ng-deep i {
+    font-size: 20px;
+  }
+}
+
+::ng-deep .maplibregl-measures {
+  position: absolute;
+  right: 0;
+  bottom: 120px;
+}
+
+.hight-progress-spinner {
+  position: absolute;
+  bottom: 330px;
+  right: 12px;
+}
+
+.low-progress-spinner {
+  position: absolute; 
+  bottom: 130px; 
+  right: 12px;
+}
+
+.elevation-loading {
+  position: absolute; 
+  right: 6px; 
+  bottom: 6px;
+}

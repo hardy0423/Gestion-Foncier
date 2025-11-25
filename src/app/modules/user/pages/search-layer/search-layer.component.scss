@@ -1,0 +1,116 @@
+@import "../../../../../theme.scss";
+@include mat-core();
+
+::ng-deep .mat-dialog-container {
+  border-radius: 20px !important;
+}
+
+.close-icon {
+  float: right;
+  transform: translate(21px, -21px);
+  width: 37px;
+  height: 37px;
+}
+
+::ng-deep .mat-fab .mat-button-wrapper {
+  padding: 0;
+  display: inline-block;
+}
+
+.title {
+  color: mat-color($theme-primary) !important;
+  font-size: large;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 70vh;
+  padding: 0 10px;
+
+  .formgroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+  }
+
+  .select-list {
+    max-height: 62vh;
+    overflow-y: auto;
+
+    ::ng-deep .mat-list-item-content {
+      padding: 0 !important;
+    }
+
+    ::ng-deep .mat-list-text {
+      padding: 0 !important;
+    }
+
+    ::ng-deep .mat-list-option {
+      border-bottom: transparent;
+    }
+
+    ::ng-deep .mat-list-option:hover {
+      background-color: transparent !important;
+      cursor: initial;
+    }
+
+    ::ng-deep .mat-list-base {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .layer-img {
+      width: 35px !important;
+      height: 35px !important;
+    }
+
+    .layer-name {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 10px;
+
+      .name {
+        width: 95%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    mat-icon {
+      border-radius: 15px !important;
+      color: red;
+    }
+  }
+}
+
+.actions {
+  position: relative;
+  background-color: white;
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 1000;
+  .btn-submit {
+    border-radius: 7px;
+    min-width: 25%;
+  }
+}
+
+.fa-search {
+  font-size: 22px;
+  padding-right: 10px;
+  color: #2872c2;
+}
+.fa-times-circle {
+  font-size: 20px;
+  transform: translateY(-4px);
+  color: #2872c2;
+}

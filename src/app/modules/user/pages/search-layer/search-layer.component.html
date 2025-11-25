@@ -1,0 +1,105 @@
+<button mat-fab color="primary" class="close-icon" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+
+<h1 class="title">
+  <ng-container *ngIf="data.for_read; else write">
+    {{ "user.add_layer_read_title" | translate }}
+  </ng-container>
+  <ng-template #write>
+    {{ "user.add_layer_write_title" | translate }}
+  </ng-template>
+</h1>
+
+<div class="content">
+  <form fxFlex="100%" [formGroup]="form">
+    <mat-form-field
+      appearance="outline"
+      style="width: 100%"
+      *ngIf="form.get('search_word')"
+    >
+      <i class="fa fa-search" aria-hidden="true" matPrefix></i>
+      <input
+        matInput
+        formControlName="search_word"
+        [matAutocomplete]="autoComplete"
+        [placeholder]="'user.search_layer' | translate"
+      />
+      <i
+        class="fa fa-times-circle pointer"
+        matSuffix
+        (click)="form.get('search_word').setValue(null)"
+        *ngIf="form.get('search_word').value"
+      ></i>
+      <mat-autocomplete
+        autoActiveFirstOption
+        #autoComplete="matAutocomplete"
+        [displayWith]="displaySelectedLayer"
+      >
+        <mat-option
+          *ngFor="let layer of searchResultLayer | async"
+          [value]="layer"
+        >
+          <mat-list>
+            <mat-list-item>
+              <div mat-line>{{ layer.name }}</div>
+            </mat-list-item>
+          </mat-list>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <mat-selection-list [multiple]="false" class="select-list">
+    <mat-list-option
+      *ngFor="let layer of layers"
+      [value]="layer"
+      color="primary"
+    >
+      <img
+        mat-list-icon
+        [src]="env.backendUrl + layer.cercle_icon"
+        class="layer-img"
+      />
+      <div class="layer-name">
+        <span class="name"> {{ layer.name }}</span>
+        <mat-icon
+          (click)="onDelete(layer)"
+          [matTooltip]="'user.remove_user_in_list' | translate"
+          matTooltipPosition="after"
+          *ngIf="form.disabled"
+          >delete</mat-icon
+        >
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <button
+    mat-raised-button
+    color="primary"
+    class="btn-submit"
+    [disabled]="layers.length == 0 || form.disabled"
+    matTooltipPosition="above"
+    (click)="onAddLayerInstance()"
+  >
+    {{ "valid" | translate }}
+    <mat-spinner
+      style="position: absolute; left: 45%; top: 16%"
+      diameter="25"
+      *ngIf="form.disabled"
+    >
+    </mat-spinner>
+  </button>
+
+  <button
+    mat-stroked-button
+    color="primary"
+    (click)="close()"
+    class="btn-submit"
+    [disabled]="form.disabled"
+  >
+    {{ "cancel" | translate }}
+  </button>
+</div>

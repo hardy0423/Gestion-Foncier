@@ -1,0 +1,249 @@
+<div class="loading" [hidden]="!loading">
+  <div class="loader-digitaliser">Loading...</div>
+</div>
+<ng-template #customNotification let-notificationData="notification">
+  <div
+    type="notificationData.type"
+    fxLayout
+    style="align-items: center; max-width: 400px"
+  >
+    <mat-icon fxFlex="35px">info</mat-icon>
+    <div
+      fxFlex
+      class="custom-help"
+      [innerHTML]="notificationData.message"
+    ></div>
+  </div>
+</ng-template>
+
+<div fxLayout="row" style="height: calc(100% - 60px)">
+  <div>
+    <ng-template digitaliserForm></ng-template>
+  </div>
+
+  <div #mapDiv fxFlex style="position: relative">
+    <!-- <mat-accordion class="legende" >
+        <mat-expansion-panel [expanded]="true" >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ 'map.edit.legend' | translate }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-legende [dataForLegends]="dataForLegends" [map]="map" [legendToNotShow]="data.getAllLegendsToNotSHow(data.layersToDigitalise)" ></app-legende>
+        </mat-expansion-panel>
+      </mat-accordion>-->
+
+    <button
+      mat-fab
+      [disabled]="!isDigitaliserDirty()"
+      class="save"
+      color="primary"
+      matTooltip="{{ 'map.edit.save' | translate }}"
+      (click)="onSubmitInstance()"
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+    <!-- <div #popupTemplate> </div> -->
+
+    <div class="btn_actions_edition_geo whiteBG" *ngIf="isReady">
+      <button
+        mat-mini-fab
+        (click)="toogleUpdateAttributeInstance()"
+        matTooltip="{{ 'map.edit.toolpit_select' | translate }}"
+        [ngClass]="{
+          primaryColorBG: updateAttributesInstance.isEnable,
+          blackBG: !updateAttributesInstance.isEnable
+        }"
+      >
+        <svg
+          style="width: 35px; margin-left: 7px; margin-bottom: 3px"
+          viewBox="-95 0 511 511.6402"
+        >
+          <path
+            class="whiteFill"
+            d="m315.710938 292.25-288.894532-288.792969c-10.582031-8.402343-26.496094-.382812-26.496094 12.183594v394.667969c0 8.832031 7.167969 16 16 16 4.160157 0 8.148438-1.601563 10.433594-3.90625l80.039063-69.738282 65.28125 152.511719c1.109375 2.601563 3.199219 4.652344 5.824219 5.71875 1.28125.488281 2.625.746094 3.96875.746094 1.429687 0 2.859374-.300781 4.203124-.875l68.691407-29.441406c5.417969-2.300781 7.9375-8.574219 5.613281-13.992188l-63.191406-147.691406h107.136718c8.832032 0 16-7.167969 16-16 0-2.582031-.660156-6.464844-4.609374-11.390625zm0 0"
+          />
+        </svg>
+      </button>
+
+      <button
+        mat-mini-fab
+        [ngClass]="{
+          primaryColorBG: updateGeometryInstance.isEnable,
+          blackBG: !updateGeometryInstance.isEnable
+        }"
+        (click)="toogleUpdateGeometryInstance()"
+        matTooltip="{{ 'map.edit.toolpit_edit_geometry' | translate }}"
+      >
+        <svg
+          x="0px"
+          y="0px"
+          viewBox="0 0 512.001 512.001"
+          style="width: 35px; margin-bottom: 0px"
+        >
+          <g>
+            <path
+              class="whiteFill"
+              d="M502.979,317.996L230.502,199.598c26.679-30.977,43.37-68.952,48.104-109.598h16.395c8.284,0,15-6.716,15-15V15
+                      c0-8.284-6.716-15-15-15h-60c-8.284,0-15,6.716-15,15v60c0,8.284,6.716,15,15,15h13.362
+                      c-5.335,38.976-23.597,74.898-52.382,102.447c-29.08,27.831-66.261,44.536-105.98,47.907v-9.265c0-8.284-6.716-15-15-15h-60
+                      c-8.284,0-15,6.716-15,15v60c0,8.284,6.716,15,15,15h60c8.284,0,15-6.716,15-15v-20.631
+                      c39.772-2.876,77.462-17.167,109.042-41.233l118.953,273.754c2.391,5.5,7.81,9.022,13.753,9.022c0.283,0,0.567-0.008,0.853-0.024
+                      c6.272-0.355,11.659-4.582,13.496-10.589l27.229-89.03c5.725-18.716,20.315-33.307,39.03-39.031l89.03-27.229
+                      c6.008-1.837,10.234-7.224,10.589-13.497C512.332,326.329,508.741,320.5,502.979,317.996z"
+            />
+          </g>
+        </svg>
+      </button>
+
+      <button
+        matTooltip="{{ 'map.edit.tooltip_add_element' | translate }}"
+        [ngClass]="{
+          primaryColorBG: addGeometryIntance.isEnable,
+          blackBG: !addGeometryIntance.isEnable
+        }"
+        (click)="toogleAddGeometryInstance()"
+        mat-mini-fab
+      >
+        <i class="fa fa-plus white" style="font-size: 34px"></i>
+      </button>
+
+      <button
+        matTooltip="{{ 'map.edit.tooltip_add_ring' | translate }}"
+        [ngClass]="{
+          primaryColorBG: addRingToGeometry.isEnable,
+          blackBG: !addRingToGeometry.isEnable
+        }"
+        (click)="toogleAddRingToGeometryInstance()"
+        mat-mini-fab
+        *ngIf="geometryType.toLowerCase() == 'multipolygon' || geometryType.toLowerCase() == 'polygon'"
+      >
+        <svg viewBox="0 0 261 281" style="width: 36px; margin-top: -2px">
+          <defs>
+            <filter
+              id="warp-filter-0"
+              x="-500%"
+              y="-500%"
+              width="1000%"
+              height="1000%"
+              bx:preset="warp 1 152 0.21"
+            >
+              <feComponentTransfer>
+                <feFuncR type="table" tableValues="1 0.5" />
+              </feComponentTransfer>
+              <feMerge result="a">
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.020999999999999998"
+                numOctaves="1"
+                result="warp"
+              />
+              <feDisplacementMap
+                xChannelSelector="R"
+                yChannelSelector="G"
+                scale="152"
+                in="a"
+                in2="warp"
+              />
+            </filter>
+          </defs>
+          <circle style="fill: white" cx="130.161" cy="142.109" r="123.657" />
+          <path
+            d="M 196.325 151.062 C 196.325 187.6 166.971 217.219 130.762 217.219 C 94.552 217.219 65.198 187.6 65.198 151.062 C 65.198 114.525 94.552 84.905 130.762 84.905 C 166.971 84.905 196.325 114.525 196.325 151.062 Z"
+            style="
+              fill: rgb(216, 216, 216);
+              filter: url(#warp-filter-0);
+              visibility: hidden;
+            "
+          />
+          <path
+            d="M 280.57 209.163 H 286.19 V 220.404 H 297.431 V 226.024 H 286.19 V 237.265 H 280.57 V 226.024 H 269.329 V 220.404 H 280.57 Z"
+            style="fill: rgb(219, 23, 23); filter: none; visibility: hidden"
+            transform="matrix(0.999991, 0.004336, -0.004336, 0.999991, -118.607651, -134.122116)"
+            bx:shape="cross 269.329 209.163 28.102 28.102 5.62 5.62 0.5 1@14aa4f60"
+          />
+          <path
+            d="M 256.761 250.853 H 281.787 V 299.597 H 331.841 V 323.968 H 281.787 V 372.712 H 256.761 V 323.968 H 206.707 V 299.597 H 256.761 Z"
+            style="fill: black"
+            transform="matrix(0.999985, 0.005445, -0.005445, 0.999985, -139.545273, -171.305115)"
+            bx:shape="cross 206.707 250.853 125.134 121.859 24.371 25.026 0.5 1@3d5bd4c6"
+          />
+        </svg>
+      </button>
+      
+      <button
+        matTooltip="{{ 'map.edit.tooltip_merge_element' | translate }}"
+        [ngClass]="{
+          primaryColorBG: mergeFeature.isEnable,
+          blackBG: !mergeFeature.isEnable
+        }"
+        (click)="toogleMergeFeatureInstance()"
+        mat-mini-fab
+        *ngIf="geometryType.toLowerCase() == 'multipolygon' || geometryType.toLowerCase() == 'polygon'"
+      >
+        <svg style="width: 35px; margin-bottom: 0px" viewBox="0 0 172 172">
+          <g
+            fill="none"
+            fill-rule="nonzero"
+            stroke="none"
+            stroke-width="1"
+            stroke-linecap="butt"
+            stroke-linejoin="miter"
+            stroke-miterlimit="10"
+            stroke-dasharray=""
+            stroke-dashoffset="0"
+            font-family="none"
+            font-weight="none"
+            font-size="none"
+            text-anchor="none"
+            style="mix-blend-mode: normal"
+          >
+            <path d="M0,172v-172h172v172z" fill="none"></path>
+            <g fill="#ffff">
+              <path
+                d="M17.2,13.76c-1.89978,0.00019 -3.43981,1.54022 -3.44,3.44v89.44c0.00019,1.89978 1.54022,3.43981 3.44,3.44h44.72v44.72c0.00019,1.89978 1.54022,3.43981 3.44,3.44h89.44c1.89978,-0.00019 3.43981,-1.54022 3.44,-3.44v-89.44c-0.00019,-1.89978 -1.54022,-3.43981 -3.44,-3.44h-44.72v-44.72c-0.00019,-1.89978 -1.54022,-3.43981 -3.44,-3.44zM20.64,20.64h82.56v43.29563l-1.90813,1.90812l4.86438,4.86438l1.90812,-1.90813h43.29563v82.56h-82.56v-43.29563l1.90813,-1.90812l-4.86438,-4.86438l-1.90812,1.90813h-43.29563zM33.39219,28.52781l-4.86437,4.86437l31.96781,31.96781h-26.09563v6.88h37.84v-37.84h-6.88v26.09563zM96.80375,70.33187l-5.83188,5.83188l4.86438,4.86438l5.83188,-5.83188zM86.48375,80.65187l-5.83188,5.83188l4.86438,4.86438l5.83188,-5.83188zM76.16375,90.97187l-5.83188,5.83188l4.86438,4.86438l5.83188,-5.83188zM99.76,99.76v37.84h6.88v-26.09563l31.96781,31.96781l4.86437,-4.86437l-31.96781,-31.96781h26.09563v-6.88z"
+              ></path>
+            </g>
+          </g>
+        </svg>
+      </button>
+    </div>
+
+    <!-- <ng-container *ngIf="isReady">
+        <button class="btn_change_layer_to_add" mat-flat-button *ngIf="addGeometryIntance.layerToAdd as layerToAdd"
+          (click)="addGeometryIntance.onChangeLayerToAddInstance()">
+          <img [src]="layerToAdd.img" style="width: 40px;height: 40px;" alt="">
+          {{layerToAdd.title}}
+        </button>
+  
+        <button class="btn_change_layer_to_add" mat-flat-button *ngIf="addRingToGeometry.layerToAdd as layerToAdd"
+          (click)="addRingToGeometry.onChangeLayerToAddInstance()">
+          <img [src]="layerToAdd.img" style="width: 40px;height: 40px;" alt="">
+          {{layerToAdd.title}}
+        </button>
+      </ng-container> -->
+
+    <div class="utils">
+      <div class="zooms" id="zoomsDigitaliser">
+        <div id="zoomIn" class="whiteBG black whiteBorder" matTooltip="Zoomer">
+          <i class="fa fa-plus" style="margin: 12px; font-size: 12px"></i>
+        </div>
+        <div
+          id="zoomOut"
+          class="whiteBG black whiteBorder"
+          matTooltip="Dézoomer"
+        >
+          <i class="fa fa-minus" style="margin: 12px; font-size: 12px"></i>
+        </div>
+      </div>
+    </div>
+    <app-mesure-digitaliser
+      class="mesure whiteBG pointer"
+    ></app-mesure-digitaliser>
+  </div>
+</div>
+
+<notifier-container> </notifier-container>

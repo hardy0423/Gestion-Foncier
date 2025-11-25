@@ -1,0 +1,21 @@
+.content {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 115px);
+
+    .map-container {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+
+    .wms-filter{
+        position:absolute;
+        top:0px;
+        right: 10px;
+        background: #ffffff8c;
+        z-index: 99;
+        border-radius: 0px 0px 10px 10px;
+    }
+
+}

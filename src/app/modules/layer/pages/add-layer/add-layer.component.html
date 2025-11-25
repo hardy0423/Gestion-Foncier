@@ -1,0 +1,70 @@
+<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="100%">
+    <h1 class="title">{{ "layer.add_layer" | translate }}</h1>
+  </div>
+  <button mat-fab color="primary" class="close-icon" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<form [formGroup]="form" *ngIf="form as context" class="content">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>{{ "layer.layer_name" | translate }}</mat-label>
+    <input matInput formControlName="name" type="text" name="name" />
+    <mat-error *ngIf="context.get('name').errors?.['required']">
+      {{ "layer.layer_name_required" | translate }}
+    </mat-error>
+  </mat-form-field>
+  <div class="fake-btn pointer" fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="15px"
+    (click)="onAddIconInstance()" [style.outline-color]="layerIcon ? '#0d589c':'#cdcdce'" [style.color]="layerIcon ? '#0d589c':'#787878'">
+    <div fxFlex="40%" fxLayout="row" fxLayoutAlign="center center"
+      [style.border-color]="layerIcon ? '#0d589c':'#cdcdce'" class="icon-container" [style.background]="layerIcon ? '#0d589c':''">
+      <i fxLayout="row" fxLayoutAlign="center center" fxFlex="100%" *ngIf="!layerIcon" class="fa-solid fa-circle-plus"></i>
+      <div fxLayout="row" fxLayoutAlign="center center" mat-list-icon fxFlex="100%"
+        *ngIf="layerIcon && !layerIcon.icon_path" [innerHTML]="transform(layerIcon.svg_as_text)" class="couche-svg">
+      </div>
+      <img mat-list-icon *ngIf="layerIcon && layerIcon.icon_path" [src]="env.backendUrl+layerIcon.icon_path"
+        fxFlex="100%">
+    </div>
+    <span fxFlex="60%" style="font-size: 16pt; font-weight: 600; text-align: center;">
+      {{ 'layer.define_icon' | translate }}
+    </span>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>{{ "layer.define_type_source" | translate }}</mat-label>
+    <mat-select formControlName="type_source">
+      <mat-option value="file_sig">
+        {{ "layer.drop_file_sig" | translate }}
+      </mat-option>
+      <mat-option value="query">
+        {{ "layer.query_sql" | translate }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="form.get('type_source').value == 'query'; else sig">
+    <mat-form-field appearance="outline" style="display: none;">
+      <mat-label style="padding-left: 10px;">{{ 'layer.choose_db' | translate }}</mat-label>
+      <mat-select formControlName="connection"  >
+        <mat-option *ngFor="let con of connections$|async" [value]="con">{{con}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'layer.queries' | translate }}</mat-label>
+      <mat-hint> {{ 'layer.queries_id_geom' | translate }}  </mat-hint>
+      <textarea matInput formControlName="sql"  ></textarea>
+      <mat-error *ngIf="form.invalid && form.errors && form.errors['sqlProblems']" > {{ 'layer.queries_id_geom_error' | translate }} </mat-error>
+    </mat-form-field>
+  </ng-container>
+  <ng-template #sig>
+    <app-file-upload style="width: 100%;" *ngIf="form.get('source')" formControlName="source" [multiple]="false">
+    </app-file-upload>
+  </ng-template>
+
+  <div mat-dialog-actions class="actions">
+    <button mat-raised-button class="btn-submit" style="margin-top: 15px;" [disabled]="!form.valid || !layerIcon" color="primary"
+      (click)="onAddInstance()">
+      {{ 'layer.create_layer' | translate }}
+    </button>
+  </div>
+  <mat-spinner style="position: absolute;left: 40%; top:50%;" *ngIf="form.disabled"></mat-spinner>
+</form>

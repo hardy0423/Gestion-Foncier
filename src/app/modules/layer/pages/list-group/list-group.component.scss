@@ -1,0 +1,38 @@
+@import "../../../../../theme.scss";
+
+.drawer-container {
+  background: transparent !important;
+  height: 100%;
+
+  .content {
+    padding: 30px 15px 30px 50px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+
+    .logo-page {
+      height: 50px;
+    }
+
+    .btn-add {
+      border-radius: 25px;
+    }
+  }
+}
+
+.label {
+  text-transform: uppercase;
+  font-size: large;
+}
+
+::ng-deep .mat-tab-label .mat-tab-label-content {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label-active {
+  color: #2872c2 !important;
+}

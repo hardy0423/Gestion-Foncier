@@ -1,0 +1,214 @@
+<form [formGroup]="form" *ngIf="form as context" class="content">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>{{ "layer.layer_name" | translate }}</mat-label>
+    <input matInput formControlName="name" type="text" name="name" />
+    <mat-error *ngIf="context.get('name').errors?.['required']">
+      {{ "layer.layer_name_required" | translate }}
+    </mat-error>
+  </mat-form-field>
+  <div
+    class="fake-btn pointer"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+    fxLayoutGap="15px"
+    (click)="onAddIconInstance()"
+    [style.outline-color]="this.form.get('icon').value ? '#0d589c' : '#cdcdce'"
+    [style.color]="this.form.get('icon').value ? '#0d589c' : '#787878'"
+  >
+    <div
+      fxFlex="40%"
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      [style.border-color]="this.form.get('icon').value ? '#0d589c' : '#cdcdce'"
+      class="icon-container"
+      [style.background]="this.form.get('icon').value ? '#0d589c' : ''"
+    >
+      <i
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        fxFlex="100%"
+        *ngIf="!this.form.get('icon').value"
+        class="fa-solid fa-circle-plus"
+      ></i>
+      <div
+        fxLayout="row"
+        fxLayoutAlign="center center"
+        mat-list-icon
+        fxFlex="100%"
+        *ngIf="this.form.get('svg_as_text').value"
+        [innerHTML]="transform(this.form.get('svg_as_text').value)"
+        class="couche-svg"
+      ></div>
+      <img
+        mat-list-icon
+        *ngIf="
+          !this.form.get('svg_as_text').value &&
+          this.form.get('icon_path').value
+        "
+        [src]="env.backendUrl + this.form.get('icon_path').value"
+        class="couche-img"
+      />
+    </div>
+    <span
+      fxFlex="60%"
+      style="font-size: 13pt; font-weight: 600; text-align: center"
+    >
+      {{ "layer.define_icon" | translate }}
+    </span>
+  </div>
+
+  <mat-accordion style="width: 70%">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header
+        [style.background]="'#2872c2'"
+        style="height: 5vh"
+        class="panel-header"
+      >
+        <mat-panel-title class="white">
+          <h4>{{ "layer.change_source" | translate }} {{ layer.name }}</h4>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <br />
+      <ng-container *ngIf="form.get('type_source').value == 'querry'; else sig">
+        <mat-form-field
+          appearance="outline"
+          style="display: none; width: 100% !important"
+        >
+          <mat-label style="padding-left: 10px">{{
+            "layer.choose_db" | translate
+          }}</mat-label>
+          <mat-select formControlName="connection">
+            <mat-option
+              *ngFor="let con of connections$ | async"
+              [value]="con"
+              >{{ con }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" style="width: 100% !important">
+          <mat-label>{{ "layer.queries" | translate }}</mat-label>
+          <mat-hint> {{ "layer.queries_id_geom" | translate }} </mat-hint>
+          <textarea matInput formControlName="sql"></textarea>
+          <mat-error
+            *ngIf="form.invalid && form.errors && form.errors['sqlProblems']"
+          >
+            {{ "layer.queries_id_geom_error" | translate }}
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+      <ng-template #sig>
+        <app-file-upload
+          style="width: 70%"
+          *ngIf="form.get('source')"
+          formControlName="source"
+          [multiple]="false"
+          [editSource]="true"
+        >
+        </app-file-upload>
+      </ng-template>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      class="btn-submit"
+      [disabled]="!form.valid"
+      color="primary"
+      (click)="onUpdateInstance()"
+    >
+      {{ "save" | translate }}
+    </button>
+
+    <button
+      mat-raised-button
+      class="btn-submit"
+      color="warn"
+      (click)="onDeleteInstance()"
+      [disabled]="layer.required"
+    >
+      {{ "layer.remove_layer" | translate }}
+    </button>
+  </div>
+
+  <mat-spinner
+    style="position: absolute; left: 40%; top: 50%"
+    *ngIf="form.disabled"
+  ></mat-spinner>
+
+  <button
+    mat-raised-button
+    class="btn-download"
+    color="primary"
+    [matMenuTriggerFor]="menuCopy"
+    [disabled]="isLoadingDownload"
+  >
+    <mat-icon>download</mat-icon>
+    {{ "map.attribute_tables.download_layer" | translate }}
+    <mat-spinner
+      style="position: absolute; left: 45%; top: 16%"
+      diameter="25"
+      *ngIf="isLoadingDownload"
+    >
+    </mat-spinner>
+  </button>
+
+  <mat-menu #menuCopy="matMenu">
+    <a mat-menu-item (click)="onDownloadInstance('shp')"> ShapeFile </a>
+    <!-- <a mat-menu-item (click)="onDownloadInstance('geojson')"> GeoJSON </a> -->
+    <a mat-menu-item (click)="onDownloadInstance('gpkg')"> Geopackage </a>
+    <a mat-menu-item (click)="onDownloadInstance('gpx')"> GPX </a>
+    <a mat-menu-item (click)="onDownloadInstance('xlsx')"> Xlsx </a>
+    <a mat-menu-item (click)="onDownloadInstance('csv')"> CSV </a>
+  </mat-menu>
+</form>
+
+<!-- LAYER METADATA -->
+<ng-container *ngIf="!showBlocMetadata; else metadata_content">
+  <mat-spinner style="left: 40%; margin-top: 10vh;"></mat-spinner>
+</ng-container>
+
+<ng-template #metadata_content>
+  <fieldset>
+    <legend>{{"layer.metadata_information" | translate }}</legend>
+    <form [formGroup]="formMeta" class="content-meta">
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "layer.source" | translate }}</mat-label>
+        <input matInput formControlName="source_meta" type="text" name="source_meta" />
+      </mat-form-field>
+    
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "layer.link_meta" | translate }}</mat-label>
+        <input matInput formControlName="link_meta" type="text" name="link_meta" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "layer.desc" | translate }}</mat-label>
+        <input matInput formControlName="description" type="text" name="description" />
+      </mat-form-field>
+        
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "layer.admin_meta" | translate }}</mat-label>
+        <input matInput formControlName="admin_meta" type="text" name="admin_meta" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "layer.date_meta" | translate }}</mat-label>
+        <input matInput formControlName="date_meta" type="date" name="date_meta" />
+      </mat-form-field>
+    
+      <div mat-dialog-actions class="actions">
+        <button
+          mat-raised-button
+          class="btn-submit"
+          [disabled]="disableMetadataButton()"
+          color="primary"
+          (click)='addMeta ? onCreateMetaInstance() : onUpdateMetaInstance()'
+        >
+          {{ "layer.save_metadata" | translate }}
+        </button>
+      </div>
+    
+    </form>
+  </fieldset>
+</ng-template>

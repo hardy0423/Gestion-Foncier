@@ -1,0 +1,112 @@
+.content {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.truncate {
+  overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 2; /* number of lines to show */
+   line-clamp: 2;
+   -webkit-box-orient: vertical;
+}
+.loading-spinner {
+  mat-spinner {
+    margin: auto;
+  }
+}
+
+.list-group {
+  ::ng-deep .mat-expansion-panel-body {
+    padding: 0 !important;
+  }
+
+  .mat-accordion .mat-expansion-panel:not(.mat-expanded),
+  .mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+    margin-bottom: 20px;
+  }
+
+  .mat-accordion .mat-expansion-panel {
+    border-radius: 15px !important;
+  }
+
+  ::ng-deep .mat-expansion-indicator {
+    padding-bottom: 0.5rem !important;
+  }
+
+  ::ng-deep .panel-header > .mat-expansion-indicator:after {
+    color: white;
+    padding: 7px !important;
+    vertical-align: none !important;
+  }
+
+  ::ng-deep mat-list-option[aria-selected="true"] {
+    background: rgb(235 224 224 / 70%);
+  }
+
+  ::ng-deep .mat-list-base .mat-list-item.mat-list-item-with-avatar,
+  .mat-list-base .mat-list-option.mat-list-item-with-avatar {
+    height: 50px;
+    border-top: 1px solid #dedede;
+    padding: 15px;
+  }
+
+  ::ng-deep .mat-list-base {
+    border-top: 1px solid #dedede;
+    padding: 0;
+    display: block;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+
+  ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content,
+  .mat-list-base .mat-list-option .mat-list-item-content {
+    position: initial;
+  }
+
+  .layer-img {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 15px !important;
+  }
+
+  .layer-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    .layer-actions-buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .move-button {
+        font-size: 39px;
+        height: 39px !important;
+        width: 39px !important;
+      }
+    }
+  }
+
+  .buttons-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+
+    .button-action {
+      margin: 10px;
+      border-radius: 7px;
+    }
+  }
+
+  .add-layer-btn {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    .btn-add {
+      border-radius: 25px;
+    }
+  }
+}

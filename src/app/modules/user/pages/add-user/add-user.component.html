@@ -1,0 +1,128 @@
+<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="100%">
+    <h1 class="title">
+      <ng-container *ngIf="user; else create">
+        {{ "user.edit_user" | translate }} <br />
+        <ng-container *ngIf="user.first_name || user.last_name; else no_name">
+          {{ user.first_name }} {{ user.last_name }}
+        </ng-container>
+        <ng-template #no_name>
+          {{ user.username }}
+        </ng-template>
+      </ng-container>
+      <ng-template #create>
+        {{ "user.add_user_btn" | translate }}
+      </ng-template>
+    </h1>
+  </div>
+  <button mat-fab color="primary" class="close-icon" (click)="dialogRef.close(false)">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-tab-group mat-align-tabs="center">
+  <mat-tab [label]="'user.infos' | translate">
+    <form [formGroup]="form" *ngIf="form as context" class="content">
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "user.last_name" | translate }} </mat-label>
+        <input matInput formControlName="last_name" type="text" name="last_name" />
+        <mat-error *ngIf="context.get('last_name').errors?.['required']">
+          {{ "user.last_name_required" | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "user.first_name" | translate }} </mat-label>
+        <input matInput formControlName="first_name" type="text" name="first_name" />
+        <mat-error *ngIf="context.get('first_name').errors?.['required']">
+          {{ "user.first_name_required" | translate }}
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ "user.email" | translate }} </mat-label>
+        <input matInput formControlName="email" type="email" name="email" />
+        <mat-error *ngIf="context.get('email').errors?.['required']">
+          {{ "user.email_edit_required" | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <ng-container *ngIf="user">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>{{ "user.username" | translate }} </mat-label>
+          <input matInput formControlName="username" type="text" name="username" readonly />
+        </mat-form-field>
+      </ng-container>
+      
+      <mat-form-field appearance="outline" class="input-entreprise">
+        <mat-label>{{ "user.entreprise_user" | translate }}</mat-label>
+        <mat-select formControlName="entreprise_id">
+          <ng-container *ngIf="listEntreprises$ | async as listEntreprises">
+            <mat-option *ngFor="let entreprise of listEntreprises" [value]="entreprise.entreprise_id">
+              {{ entreprise.name }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <button mat-button *ngIf="context.get('entreprise_id').value != null" matSuffix mat-icon-button
+          aria-label="Clear" (click)="
+            context.get('entreprise_id').setValue(null);
+            $event.stopPropagation()
+          ">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="input-entreprise" *ngIf="!context.get('is_superuser').value">
+        <mat-label>{{ "user.group" | translate }} </mat-label>
+        <mat-select formControlName="group_id">
+          <ng-container *ngIf="listGroupes$ | async as listGroupes">
+            <mat-option *ngFor="let group of listGroupes" [value]="group.id">
+              {{ group.name }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <button mat-button *ngIf="context.get('group_id').value != null" matSuffix mat-icon-button aria-label="Clear"
+          (click)="
+            context.get('group_id').setValue(null); $event.stopPropagation()
+          ">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="is_superuser" color="primary">
+        {{ "user.super_user" | translate }}
+      </mat-checkbox>
+
+      <div mat-dialog-actions class="actions">
+        <button mat-raised-button class="btn-submit" [disabled]="!form.valid" color="primary"
+          (click)="user ? onEditUserInstance() : onAddUserInstance()">
+          <ng-container *ngIf="user; else creation">
+            {{ "save_simple" | translate }}
+          </ng-container>
+          <ng-template #creation>
+            {{ "add" | translate }}
+          </ng-template>
+        </button>
+
+        <button (click)="onChangeStatusUserInstance()" *ngIf="user" mat-raised-button class="btn-submit"
+          [color]="user.is_active ? 'warn' : 'accent'">
+          <ng-container *ngIf="user.is_active; else desactive">
+            {{ "desactivate" | translate }}
+          </ng-container>
+          <ng-template #desactive>
+            {{ "activate" | translate }}
+          </ng-template>
+        </button>
+
+        <button *ngIf="!user" mat-stroked-button class="btn-submit" color="primary" (click)="dialogRef.close(false)">
+          {{ "cancel" | translate }}
+        </button>
+      </div>
+
+      <mat-spinner diameter="50" style="position: absolute; left: 50%" *ngIf="form.disabled"></mat-spinner>
+    </form>
+  </mat-tab>
+  <mat-tab [label]="'user.right' | translate" *ngIf="user" [disabled]="user && user.is_superuser">
+    <app-user-right [user]="user"></app-user-right>
+  </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,23 @@
+@import "../../modal-style.scss";
+
+.close-icon {
+  float: right;
+  transform: translate(21px, -21px);
+  width: 35px;
+  height: 35px;
+}
+
+::ng-deep .mat-fab .mat-button-wrapper {
+  padding: 0;
+  display: inline-block;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .btn-submit {
+    border-radius: 10px;
+  }
+}

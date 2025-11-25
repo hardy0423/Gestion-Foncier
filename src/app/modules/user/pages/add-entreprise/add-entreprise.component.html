@@ -1,0 +1,75 @@
+<div class="header" fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="100%">
+    <h1 class="title">
+      <ng-container *ngIf="entreprise; else create">
+        {{ "entreprise.edit_entreprise" | translate }} <br />
+        {{ entreprise.name }}
+      </ng-container>
+      <ng-template #create>
+        {{ "entreprise.add_entreprise_btn" | translate }}
+      </ng-template>
+    </h1>
+  </div>
+  <button
+    mat-fab
+    color="primary"
+    class="close-icon"
+    (click)="dialogRef.close(false)"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<form [formGroup]="form" *ngIf="form as context" class="content">
+  <mat-form-field appearance="outline" color="primary">
+    <mat-label>{{ "entreprise.name" | translate }} </mat-label>
+    <input matInput formControlName="name" type="text" name="name" />
+    <mat-error *ngIf="context.get('name').errors?.['required']">
+      {{ "entreprise.name_required" | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <div mat-dialog-actions class="actions">
+    <button
+      mat-raised-button
+      class="btn-submit"
+      [disabled]="!form.valid"
+      color="primary"
+      (click)="
+        entreprise ? onEditEntrepriseInstance() : onAddEntrepriseInstance()
+      "
+    >
+      <ng-container *ngIf="entreprise; else creation">
+        {{ "save_simple" | translate }}
+      </ng-container>
+      <ng-template #creation>
+        {{ "add" | translate }}
+      </ng-template>
+    </button>
+
+    <button
+      (click)="onDeleteEntrepriseInstance()"
+      *ngIf="entreprise"
+      mat-raised-button
+      class="btn-submit"
+      color="warn"
+    >
+      {{ "delete" | translate }}
+    </button>
+
+    <button
+      *ngIf="!entreprise"
+      mat-stroked-button
+      class="btn-submit"
+      color="primary"
+      (click)="dialogRef.close(false)"
+    >
+      {{ "cancel" | translate }}
+    </button>
+  </div>
+
+  <mat-spinner
+    diameter="50"
+    style="position: absolute; left: 50%"
+    *ngIf="form.disabled"
+  ></mat-spinner>
+</form>

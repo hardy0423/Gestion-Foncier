@@ -1,0 +1,62 @@
+<h1 mat-dialog-title>
+  <span class="bold primaryColor" style="font-size: 17px"
+    >{{ 'layer.icon.add_icons' | translate }}
+  </span>
+
+  <i mat-dialog-close class="fa fa-times primaryColor pointer close"></i>
+</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="saveIcon()">
+    <mat-form-field
+      appearance="outline"
+      *ngIf="form.get('attribution')"
+      style="width: 100%"
+    >
+      <mat-label> {{ 'layer.icon.image_attributions' | translate }} </mat-label>
+      <input matInput formControlName="attribution" />
+    </mat-form-field>
+
+    <app-update-tags [type]="'icons'" [tagsForm]="form.get('tags')">
+    </app-update-tags>
+
+    <app-file-upload
+      *ngIf="form.get('path')"
+      formControlName="path"
+      [multiple]="true"
+      [accept]="'image/*'"
+    ></app-file-upload>
+    <span *ngIf="hasError('path', 'required')">
+      {{ 'layer.icon.image_required' | translate }}
+    </span>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div fxLayout fxLayoutGap="15px" fxLayoutAlign="end">
+    <mat-progress-bar
+      fxFlex="100%"
+      mode="indeterminate"
+      *ngIf="form.disabled"
+    ></mat-progress-bar>
+    <button
+      fxFlex="150px"
+      mat-stroked-button
+      color="primary"
+      [disabled]="form.disabled"
+      (click)="close()"
+    >
+      {{ "cancel" | translate }}
+    </button>
+    <button
+      fxFlex="150px"
+      mat-flat-button
+      color="accent"
+      class="white"
+      (click)="saveIcon()"
+      [disabled]="!form.valid || form.disabled"
+    >
+      {{ 'valid' | translate }}
+    </button>
+  </div>
+</mat-dialog-actions>

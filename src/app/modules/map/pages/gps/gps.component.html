@@ -1,0 +1,44 @@
+<h1
+  mat-dialog-title
+  class="primaryColorBG white"
+  cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane"
+  cdkDragHandle
+  style="position: relative"
+>
+  <span>
+    <div class="gps-header"></div>
+    {{ "map.tools.map_gps" | translate }}
+  </span>
+  <i mat-dialog-close class="fa fa-times-circle close"></i>
+</h1>
+<form [formGroup]="form">
+  <div
+    mat-dialog-content
+    style="max-height: 250px !important; overflow: hidden"
+  >
+    <p>{{ "map.insert_gps_coordinate" | translate }}</p>
+    <div class="blockInput">
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="data.latitude" [placeholder]="'map.latitude' | translate" formControlName="lat" class="form-control">
+        <mat-error>
+          <span *ngIf="lat.errors?.['required']">{{ "map.error_gps.field_required" | translate }}</span>
+          <span *ngIf="lat.errors?.['pattern']">{{ "map.error_gps.pattern_invalid" | translate }}</span>
+      </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="data.longitude" [placeholder]="'map.longitude' | translate" formControlName="lng" class="form-control">
+        <mat-error>
+          <span *ngIf="lng.errors?.['required']">{{ "map.error_gps.field_required" | translate }}</span>
+          <span *ngIf="lng.errors?.['pattern']">{{ "map.error_gps.pattern_invalid" | translate }}</span>
+      </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions  class="fiche-descriptive-actions">
+    <button mat-raised-button (click)="zoomOnCoordinate()">
+      <i class="fa fa-search-plus"> </i>
+      {{ "descriptive_sheet.zoomTo" | translate }}
+    </button>
+  </div>
+</form>

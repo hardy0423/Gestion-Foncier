@@ -1,0 +1,23 @@
+<div class="layer-switcher">
+
+<div id="fond_swicther" [style.left]="left" [style.bottom]="bottom" 
+    class="fond_swicther primaryColorBorder" >
+    <ng-container *ngFor="let fond of imagette"  >
+        <div class="one_fond" *ngIf="fond.visible" >
+            <img src="{{fond.urlImage}}" id="fond_swicther_img" style="width:100%;height:100%">
+            <span class="fond_swicther_titre white">{{fond.nom}}</span>
+        </div>
+    </ng-container>
+</div>
+
+<div id="fond_swicther_non_active" [style.left]="left" [style.bottom]="bottom" 
+    class="fond_swicther primaryColorBorder" >
+    <ng-container *ngFor="let fond of imagette"  >
+        <div class="one_fond" *ngIf="!fond.visible" (click)="toggleSatelitte(fond.id)" >
+            <img src="{{fond.urlImage}}" id="fond_swicther_img" style="width:100%;height:100%">
+            <span class="fond_swicther_titre white">{{fond.nom}}</span>
+        </div>
+    </ng-container>
+  
+</div>
+</div>

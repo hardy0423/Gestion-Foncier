@@ -1,0 +1,92 @@
+.drawer-container {
+  background: transparent !important;
+  height: 100%;
+
+  .btn-actions {
+    display: flex;
+    padding: 20px 20px 0 0;
+    flex-direction: row-reverse;
+    .btn-add {
+      border-radius: 25px;
+    }
+  }
+
+  .loading-spinner {
+    mat-spinner {
+      margin: auto;
+    }
+  }
+}
+
+.list-entreprises {
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: 20px;
+  // height: 71vh;
+
+  .list-entreprises-body {
+    position: relative;
+    .list-entreprises-body-table {
+      overflow: scroll;
+      max-height: calc(76vh - 50px);
+      width: 100%;
+
+      .entreprise-admin-icon {
+        font-size: 10px;
+        width: 15px;
+        height: 15px;
+        transform: translateY(-7px);
+      }
+
+      .mat-header-cell {
+        text-align: left;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 14px;
+        color: #2872c2;
+      }
+
+      ::ng-deep .mat-sort-header-arrow {
+        color: #2872c2 !important;
+      }
+
+      .mat-column-name {
+        width: 400px;
+      }
+
+      tr.element-row:hover {
+        cursor: pointer;
+        background: whitesmoke;
+      }
+    }
+  }
+}
+
+.scroll::-webkit-scrollbar-track {
+  margin-top: 55px;
+  padding-left: 10px;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 3px;
+  ::ng-deep .mat-sort-header-content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: #747678;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+
+.no-data {
+  height: 500px;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-direction: row;
+  justify-content: center;
+}

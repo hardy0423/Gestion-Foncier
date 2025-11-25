@@ -1,0 +1,50 @@
+<div class="content">
+    <div class="header">
+        <h1 class="title">
+            {{ 'map.attribute_tables.edit_selection' | translate }}
+        </h1>
+        <button mat-fab color="primary" class="close-icon" (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <span style="text-align: center;margin-bottom: 20px;">
+        {{'map.attribute_tables.change_value_field' | translate}}
+    </span>
+
+    <form [formGroup]="form" *ngIf="form as context" class="formgroup">
+
+        <mat-form-field appearance="outline" style="width: 40%;">
+            <mat-label> {{'map.attribute_tables.field' | translate}} </mat-label>
+            <mat-select formControlName="column">
+                <mat-option *ngFor="let element of data.columns" [value]="element">
+                    {{ element.column }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="context.get('column').errors?.['required']">
+              {{'map.attribute_tables.field_required' | translate}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" color="primary" style="width: 40%;margin-left: 30px;">
+            <mat-label> {{'map.attribute_tables.value' | translate}}</mat-label>
+            <input matInput formControlName="value" [type]="context.get('column').value.type" />
+            <mat-error *ngIf="context.get('value').errors?.['required']">
+                {{'map.attribute_tables.value_required' | translate}}
+            </mat-error>
+        </mat-form-field>
+    </form>
+
+    <div mat-dialog-actions class="actions">
+        <button mat-raised-button color="accent" class="btn-submit" (click)="onUpdateInstance()"
+            [disabled]="!form.valid">
+            {{"save_simple"| translate}}
+        </button>
+
+        <button mat-stroked-button color="primary" class="btn-submit" (click)="close()" style="margin-left: 35px;">
+            {{"cancel"| translate}}
+        </button>
+    </div>
+
+    <mat-spinner diameter="50" style="position: absolute; left: 50%" *ngIf="form.disabled"></mat-spinner>
+</div>

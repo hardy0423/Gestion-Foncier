@@ -1,0 +1,32 @@
+<mat-form-field
+  *ngIf="colorForm"
+  appearance="outline"
+  id="input-color"
+  [attr.style]="width ? 'width:' + width : ''"
+>
+  <mat-label> {{ colorLabel }} </mat-label>
+  <input
+    class="input-style"
+    [cpPositionOffset]="'50%'"
+    [cpPosition]="position"
+    [cpAlphaChannel]="'always'"
+    [cpOutputFormat]="colorOutputFormat"
+    [cpPresetColors]="presetValues"
+    [cpSaveClickOutside]="true"
+    [(colorPicker)]="colorForm.value"
+    (colorPickerChange)="onColorPickerSelect($event, 'color')"
+    matInput
+    [attr.style]="'background:' + colorForm.value + ' !important' | safeStyle"
+    [formControl]="colorForm"
+  />
+  <img
+    [src]="
+      onFocus
+        ? '../../../../../assets/images/picto/paint-board-and-brush (1).png'
+        : '../../../../../assets/images/picto/paint-board-and-brush.png'
+    "
+    class="icon-input"
+    matSuffix
+  />
+  <mat-error> {{ colorError }}</mat-error>
+</mat-form-field>

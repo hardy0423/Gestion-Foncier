@@ -1,0 +1,87 @@
+<h1
+  mat-dialog-title
+  class="primaryColorBG white"
+  cdkDrag
+  cdkDragRootElement=".cdk-overlay-pane"
+  cdkDragHandle
+  style="position: relative"
+>
+  <span>
+    <div class="symbology-header"></div>
+    {{ 'couche_en_cours.edit_color' | translate }}
+  </span>
+  <i mat-dialog-close class="fa fa-times-circle close"></i>
+</h1>
+<form>
+  <div
+    mat-dialog-content
+    style="overflow: hidden"
+  >
+    <p>{{ 'couche_en_cours.desc_symbology_category' | translate }}</p>
+    <div class="blockInput">
+        <mat-list>
+            <mat-list-item class="category_item" *ngFor="let category of data.layer.vs.category; last as last;">
+                <div fxLayout fxLayoutAlign="center center" fxLayoutGap="5px" >
+                    <img  
+                        height="25px"
+                        fxFlex="30px"
+                        [src]="
+                        data.layer.vp.url_server
+                        +'&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&TRANSPARENT=true&LAYERS='+data.layer.vp.id_server
+                        +'&STYLE='+data.layer.vs.name
+                        +'&RULE='+category.name
+                        +'&WIDTH=30&HEIGHT=25&TRANSPARENT=true&RULELABEL=false&FORMAT=image/png&SYMBOLWIDTH=10&SYMBOLHEIGHT=4'
+                        | secure | async" 
+                    >
+                    <div fxFlex="250px" class="category-text">{{category.name}}</div>
+                    <div fxFlex="40px" fxLayoutGap="10px">
+                        <div  *ngIf="category.isUpdate" class="chosen-color" [style.background]="category.chosenColor"></div>
+                    </div>
+                    <div fxFlex="25px">
+                        <i
+                            #ignoredButton
+                            class="fa fa-eye-dropper pointer edit-color primaryColor"
+                            (click)="toggleColorPicker(category)"
+                        >
+                            <input #ignoredInput
+                                [cpOKButton]="true"
+                                [cpOKButtonText]="'layer.select_color' | translate"
+                                [cpOKButtonClass]= "'btn btn-primary btn-xs butt pointer'"
+                                [cpOutputFormat]="'hex'"
+                                [(colorPicker)]="default_color" 
+                                [style.background]="default_color"
+                                [cpPosition]="'right'"
+                                [cpPositionRelativeToArrow]="true"
+                                (colorPickerSelect) ="onSelect($event, category)"
+                                [cpSaveClickOutside] = "false"
+                                [cpIgnoredElements]="[ignoredButton, ignoredInput]"
+                                [(cpToggle)]="category.isToggle"
+                                class="inputColor"
+                            />
+                        </i>
+                    </div>
+                    <div fxFlex="25px" style="text-align: center;">
+                        <i
+                            *ngIf="category.isUpdate"
+                            class="fa fa-close pointer delete-color warnColor"
+                            (click)="deleteChosenColor(category)"
+                        >
+                        </i>
+                    </div>
+                </div>
+                <mat-divider class="background-divider" *ngIf="!last"></mat-divider>
+            </mat-list-item>
+        </mat-list>
+    </div>
+  </div>
+  <div mat-dialog-actions  class="fiche-descriptive-actions">
+    <button mat-button (click)="onCancel()">
+        <i class="fa fa-times"> </i>
+        {{ "cancel" | translate }}
+    </button>
+    <button mat-raised-button (click)="saveColor()" [disabled] = "arrayColors.length == 0">
+      <i class="fa fa-save"> </i>
+      {{ "save" | translate }}
+    </button>
+  </div>
+</form>

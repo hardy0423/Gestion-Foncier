@@ -1,0 +1,56 @@
+@import "../../../../../../theme.scss";
+@include mat-core();
+
+::ng-deep .mat-dialog-container {
+  border-radius: 20px !important;
+}
+
+.close-icon {
+  float: right;
+  transform: translate(21px, -21px);
+  width: 37px;
+  height: 37px;
+}
+
+::ng-deep .mat-fab .mat-button-wrapper {
+  padding: 0;
+  display: inline-block;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 37px;
+
+  .title {
+    color: mat-color($theme-primary) !important;
+    text-transform: uppercase;
+    font-size: large;
+    padding-bottom: 15px;
+    text-align: center;
+  }
+
+  .groups-container {
+    max-height: 300px;
+    overflow: auto;
+    .group-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 20px;
+  padding: 0px 0 35px 0;
+  .btn-submit {
+    border-radius: 7px;
+    min-width: 30%;
+  }
+}

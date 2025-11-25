@@ -1,0 +1,73 @@
+<mat-drawer-container class="drawer-container" hasBackdrop="false">
+  <mat-drawer
+    #drawer
+    mode="over"
+    position="end"
+    style="width: 25vw"
+    autoFocus="false"
+  >
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="btn-actions">
+      <button
+        (click)="onAddEntrepriseInstance()"
+        mat-raised-button
+        color="primary"
+        class="btn-add"
+      >
+        {{ "entreprise.add_entreprise_btn" | translate }}
+      </button>
+    </div>
+    <div class="text-center loading-spinner">
+      <mat-spinner color="primary" diameter="50" *ngIf="loading"></mat-spinner>
+    </div>
+    <ng-container *ngIf="entreprises$ | async as entreprises">
+      <div class="list-entreprises" *ngIf="entreprises.length > 0">
+        <div fxFlex class="list-entreprises-body">
+          <div #scroll class="list-entreprises-body-table scroll">
+            <table
+              mat-table
+              matSort
+              matSortActive="created_at"
+              matSortDisableClear
+              matSortDirection="desc"
+              [dataSource]="entreprises"
+              class="list-entreprises-body-table"
+            >
+              <ng-container matColumnDef="name">
+                <th
+                  mat-header-cell
+                  mat-sort-header
+                  disableClear
+                  *matHeaderCellDef
+                >
+                  {{ "entreprise.name" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.name }}
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns; sticky: true"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                class="pointer"
+                (click)="onEditEntrepriseInstance(row)"
+              ></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="entreprises.length == 0">
+        <div class="no-data">
+          <h3>{{ "entreprise.no_entreprise_found" | translate }}</h3>
+        </div>
+      </ng-container>
+    </ng-container>
+  </mat-drawer-content>
+</mat-drawer-container>
+<notifier-container></notifier-container>

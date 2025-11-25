@@ -1,0 +1,58 @@
+<ng-container *ngIf="form && !isFullscreen">
+  <form [formGroup]="form">
+    <div class="search-container" matAutocompleteOrigin #origin="matAutocompleteOrigin">
+      <mat-card class="searchbar">
+        <button mat-icon-button class="icon-btn">
+          <mat-icon>search</mat-icon>
+        </button>
+        <input class="search-input" formControlName="searchWord" [placeholder]="
+            handle.includes('parcelle')
+              ? ('search.placeholder_parcelle' | translate)
+              : ('search.placeholder' | translate)
+          " [matAutocomplete]="auto" [matAutocompleteConnectedTo]="origin" />
+        <button mat-icon-button class="icon-btn" [disabled]="!form.get('searchWord').value" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card>
+    </div>
+
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayAutocompleteFn"
+      (optionSelected)="optionAutocompleteSelected($event)">
+      <mat-optgroup *ngFor="let option of objectsIn(filterOptions)" [label]="'search.' + [option] | translate"
+        [hidden]="filterOptions[option].length == 0">
+        <mat-option *ngFor="let item of filterOptions[option]" [value]="item"
+          [ngClass]="option == 'parcelle' ? 'content-parcelle' : ''">
+          <ng-container *ngIf="option == 'entity'">
+            <img [src]="item.icon" alt="{{ item.name }}" class="search-form-option-img" />
+            {{ item.id }} . {{ item.name }}
+            <br />
+            <small class="bold"> {{ item.layer.name }} </small>
+          </ng-container>
+          <ng-container *ngIf="option == 'layer'">
+            <img [src]="item.icon" alt="{{ item.name }}" class="search-form-option-img" />
+            {{ item.name }}
+            <mat-chip-list class="search-form-option-badge" *ngIf="item.number">
+              <mat-chip style="padding: 5px 5px; min-height: 20px; font-size: 11px" class="white accentColorBG">
+                {{ item.number }}
+              </mat-chip>
+            </mat-chip-list>
+          </ng-container>
+          <ng-container *ngIf="option == 'parcelle'">
+            <div class="item-parcelle">
+              <span class="section-name">
+                {{ item.section }} - {{ item.parcelle }} -
+                {{ item.nom_commune }}
+              </span>
+              <span class="proprietaire">{{ item.proprietaire }}</span>
+              <span class="idu">
+                {{ item.idu }}
+                - {{ item.surface | number : "1.2-2":'fr-FR' }}m<sup>2</sup>
+              </span>
+            </div>
+          </ng-container>
+        </mat-option>
+      </mat-optgroup>
+    </mat-autocomplete>
+  </form>
+</ng-container>
+<notifier-container></notifier-container>

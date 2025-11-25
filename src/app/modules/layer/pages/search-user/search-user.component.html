@@ -1,0 +1,96 @@
+<button mat-fab color="primary" class="close-icon" (click)="close()">
+  <mat-icon>close</mat-icon>
+</button>
+
+<h1 class="title">
+  <ng-container *ngIf="data.for_read; else write">
+    Restreindre le droit de visualisation de la couche
+  </ng-container>
+  <ng-template #write> Ajouter le droit d'écriture sur la couche </ng-template>
+  <br />
+  {{ data.layer.name }}
+</h1>
+
+<div class="content">
+  <form fxFlex="100%" [formGroup]="form">
+    <mat-form-field
+      appearance="outline"
+      style="width: 100%"
+      *ngIf="form.get('search_word')"
+    >
+      <i class="fa fa-search" aria-hidden="true" matPrefix></i>
+      <input
+        matInput
+        formControlName="search_word"
+        [matAutocomplete]="autoComplete"
+        [placeholder]="'user.search_group' | translate"
+      />
+      <i
+        class="fa fa-times-circle pointer"
+        matSuffix
+        (click)="form.get('search_word').setValue(null)"
+        *ngIf="form.get('search_word').value"
+      ></i>
+      <mat-autocomplete
+        autoActiveFirstOption
+        #autoComplete="matAutocomplete"
+        [displayWith]="displaySelectedUser"
+      >
+        <mat-option
+          *ngFor="let group of searchResultGroup | async"
+          [value]="group"
+        >
+          <mat-list>
+            <mat-list-item>
+              <div mat-line>
+                {{ group.name }}
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <mat-selection-list [multiple]="false" class="select-list">
+    <mat-list-option *ngFor="let group of groups" [value]="group">
+      <div class="user-name">
+        <span class="name">
+          {{ group.name }}
+        </span>
+        <mat-icon
+          class="user-img"
+          (click)="onDelete(group)"
+          [matTooltip]="'user.remove_user_in_list' | translate"
+          matTooltipPosition="after"
+        >
+          delete
+        </mat-icon>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+
+<div mat-dialog-actions class="actions">
+  <button
+    mat-raised-button
+    color="primary"
+    class="btn-submit"
+    [disabled]="groups.length == 0"
+    [matTooltip]="textButton"
+    matTooltipPosition="above"
+    (click)="onAddInstance()"
+  >
+    {{ "valid" | translate }}
+  </button>
+
+  <button
+    mat-stroked-button
+    color="primary"
+    (click)="close()"
+    class="btn-submit"
+  >
+    {{ "cancel" | translate }}
+  </button>
+  <mat-spinner style=" position: absolute;left: 40%; top:50%;" *ngIf="loading"></mat-spinner>
+</div>
